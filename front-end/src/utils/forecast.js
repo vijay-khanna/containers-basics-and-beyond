@@ -125,7 +125,7 @@ bodyem.on('update', function () {
     
 console.log(body.currently.summary+' It is Currently '+body.currently.temperature+' Celcius. There is a '+ percentRainChance+' Percent Chance of rain \n'+'Message of the Moment : '+motm+ '\n Pi Value : '+piValue +' sumArray '+sumArray+' randomWait '+randomWait)
 
-callback(undefined, body.currently.summary+' It is Currently '+body.currently.temperature+' Celcius. There is a '+ percentRainChance+' Percent Chance of rain. \n ' +'Message of the Moment : '+ motm + ' sumArray : '+sumArray+' randomWait : '+randomWait +' \n Pi Value : '+piValue)
+callback(undefined, body.currently.summary+' Its Currently '+body.currently.temperature+' Celcius. There is '+ percentRainChance+' % Chance of rain.* \n ' +'Message of the Moment : '+ motm + ' * Sum of Array : '+sumArray+' randomWait : '+randomWait +' \n * Pi Value : '+piValue)
      
         //Check for Internet Connectivity Errors
         //console.log(response)
