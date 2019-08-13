@@ -1,3 +1,5 @@
+const URLPiArray = 'http://back-end-pi-array-service:90/pi'  
+var urlMotm = `http://MOTMLBURL:91/motm`
 const yargs = require('yargs')
 const chalk = require('chalk')
 var request = require('request');
@@ -13,8 +15,7 @@ var globalresult = {}
           var motm ='Be Happy'
           var resdata = 0
          var  piDigits=500
-         const URLPiArray = 'http://back-end-pi-array-service:90/pi'  
-         var urlMotm = `http://MOTMLBURL:91/motm`
+
 
 //var varpiArrayVal = 0
 
