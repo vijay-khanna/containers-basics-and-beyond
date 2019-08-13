@@ -1,4 +1,4 @@
-# Lab # 1 : Installing the Kubernetes Cluster
+# Lab : Installing the Kubernetes Cluster
 We will be using AWS EKS for this demo. Login with an Administrator equivalent user to AWS console.
 
 ### Deploy Cloud9 IDE:

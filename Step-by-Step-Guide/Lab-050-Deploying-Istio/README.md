@@ -1,4 +1,4 @@
-# Lab # : Deploying and Testing Istio 
+# Lab : Deploying and Testing Istio 
 
 In this Lab, we will deploy helm and Istio
 

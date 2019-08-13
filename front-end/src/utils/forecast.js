@@ -14,7 +14,7 @@ var globalresult = {}
           var resdata = 0
          var  piDigits=500
          const URLPiArray = 'http://back-end-pi-array-service:90/pi'  
-         var urlMotm = `http://MOTMLBURL/motm`
+         var urlMotm = `http://MOTMLBURL:91/motm`
 
 //var varpiArrayVal = 0
 
