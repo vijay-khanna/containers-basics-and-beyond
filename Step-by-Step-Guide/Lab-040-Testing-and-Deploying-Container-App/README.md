@@ -1,4 +1,4 @@
-# Lab # 2 : Deploying the Containerized Application 
+# Lab # : Deploying the Containerized Application 
 In this Lab, we will deploy and test the application manually step by step. This will help to figure out any issues. 
 
 * **Clone Repo**
