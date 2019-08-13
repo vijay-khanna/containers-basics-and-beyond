@@ -79,7 +79,7 @@ head -n3 ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast
 ```
 cd ~/environment/containers-basics-and-beyond/front-end/       
 aws ecr get-login --region us-east-1 --no-include-email  
-//Copy-Paste the Console output of above command output into the console to login. Starting with "docker login.... Ending with amazonaws.com". You must get "Login Succeeded" message to proceed.
+#//Copy-Paste the Console output of above command output into the console to login. Starting with "docker login.... Ending with amazonaws.com". You must get "Login Succeeded" message to proceed.
 
 
  #// This will delete existing ECR REPO
