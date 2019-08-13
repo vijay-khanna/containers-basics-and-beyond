@@ -1,0 +1,6 @@
+hello
+apple
+cat
+407271486871.dkr.ecr.us-east-1.amazonaws.com/back-end-pi-array
+dog
+

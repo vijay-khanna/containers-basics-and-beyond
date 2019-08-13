@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Weather</title>
+        <link rel="icon" href="./images/favicon.png">
+        <link rel="stylesheet" href="./css/styles.css">
+        
+
+    </head>
+    
+    <body>
+        <div class="main-content">
+            {{>header}} 
+            <p>Use this site to get Weather..</p>
+
+            <form>
+                <input placeholder="Type your Location">
+                <button> Search
+
+                </button>
+            </form>
+            <p id="message-One"  style="color:rgb(2, 56, 2)">
+
+            </p>
+            <p id="message-Two"  style="color:rgb(4, 1, 39)">
+
+            </p>
+
+
+        </div>
+        
+        
+        {{>footer}}
+        <script src="/js/app-client-script.js" one="1-One" ></script>
+    </body>
+
+</html>

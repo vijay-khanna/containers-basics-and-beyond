@@ -1,0 +1,32 @@
+# Deploy this deployment Yaml using command as 
+# store the image url in a temp variable on command prompt
+# image_url='<path to Image:version'
+#
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end-motm-deployment
+  labels:
+    app: back-end-motm
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: back-end-motm
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: back-end-motm
+        version: v1
+    spec:
+      containers:
+      - name: back-end-motm
+        image: IMAGE_URL
+        ports:
+        - containerPort: 91
+        
+        

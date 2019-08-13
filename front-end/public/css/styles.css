@@ -1,0 +1,58 @@
+body {
+    background-color: rgba(123, 162, 245, 0.863);
+    color: blue;
+    font-family: arial;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 16px;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+}
+.main-content{
+    flex-grow:1;
+
+}
+footer {
+    background: yellow;
+    border-top: 1px solid #1f1c1c;
+    margin-top: 2px;
+    margin: 2px;
+    padding: 2px;
+}
+
+header {
+margin-top: 16px;
+margin-bottom: 48px;
+}
+
+header a {
+    color: #2d6243;
+    margin-right: 16px;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: rgba(93, 72, 3, 0.801);
+}
+
+.potrait {
+    width: 250px;
+}
+
+input {
+    border: 1px solid #530853;
+    padding: 8px;
+}
+
+button {
+    cursor: pointer;
+    border: 1px solid #34c35f;
+    background: #683d99;
+    color: white;
+    padding: 8px;
+}

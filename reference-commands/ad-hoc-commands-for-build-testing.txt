@@ -1,0 +1,170 @@
+////Docker commands
+// from within the folder /home/ec2-user/environment/web-weather-app/front-end
+////*** Front End Re-Build
+cd /home/ec2-user/environment/web-weather-app/front-end
+docker build -t front-end:v1 .
+docker images  | grep front-end
+frontEndImageId=$(docker images front-end:v1 | grep front-end | awk '{print $3}') ; echo $frontEndImageId
+
+
+
+docker tag $frontEndImageId $frontEndWebServerURI
+docker images  | grep front-end
+aws ecr get-login --region us-east-1 --no-include-email  
+
+docker push $frontEndWebServerURI
+            ///Finished ReBuilding Front End..
+/ Deploying Pods
+kubectl delete -f deployment-front-end.yaml 
+kubectl apply -f deployment-front-end.yaml 
+
+///
+
+
+
+
+//////*** Deploy Backend Pi Array 
+
+cd /home/ec2-user/environment/web-weather-app/backend-pi-array
+docker build -t back-end-pi-array:v1 .
+docker images  | grep back-end-pi-array
+BackEndPiArrayEndImageId=$(docker images back-end-pi-array:v1 | grep back-end-pi-array | awk '{print $3}') ; echo $BackEndPiArrayEndImageId
+
+echo $backEndPiArrayURI
+
+docker tag $BackEndPiArrayEndImageId $backEndPiArrayURI
+docker images  | grep back-end-pi-array
+docker push $backEndPiArrayURI
+            ///Finished ReBuilding Backend..
+
+docker kill back-end-pi-array ; docker rm back-end-pi-array
+docker run -t -d -p 8083:8083 --name back-end-pi-array back-end-pi-array:v1
+docker ps
+  curl -X POST -H "Content-Type: application/json" --data '{"piDigits":500}' http://localhost:8083/pi
+
+
+
+docker exec -it front-end /bin/bash
+
+/ Deploying Pods
+kubectl delete -f deployment-front-end.yaml 
+kubectl apply -f deployment-front-end.yaml 
+
+
+/////Finished Deploying backend Pi Array. 
+
+
+//Stop and  remove all dontainers
+docker stop $(docker ps -aq); docker container rm $(docker container ls -aq); docker system prune; docker ps
+
+docker run -t -d -p 80:80 --name front-end front-end:v1
+docker ps
+
+docker exec -it front-end /bin/bash
+    // curl localhost           // from within the container to check web service running.
+
+docker exec -it front-end node --version                // will print node version
+docker images                           //Note IMAGE_ID
+
+aws ecr create-repository --repository-name front-end       //note the repositoryUri : account ID specifially
+
+//capture the URI into Variable for later use.
+backEndPiArrayURI=$(aws ecr create-repository --repository-name back-end-pi-array | jq -r  '.repository.repositoryUri')
+echo $backEndPiArrayURI
+//Replace the docker file with the repo uri. 
+
+
+
+docker images back-end-pi-array:v1
+docker tag <IMAGE_ID> <repositoryUri>
+
+image_id=$(docker images back-end-pi-array:v1 | grep back-end-pi-array | awk '{print $3}')
+docker tag $image_id $backEndPiArrayURI
+docker images | grep $image_id
+
+//check the image got tagged. 
+aws ecr get-login --region us-east-1 --no-include-email     //copy-paste the command along with token : docker login....
+
+
+docker push $backEndPiArrayURI
+docker push $frontEndWebServerURI
+
+//before deploying the docker image via kubectl deployment, replace the Image_Name with the repo URI.
+sed -i "s|IMAGE_URL|$backEndPiArrayURI|g" deployment-back-end-pi-array.yaml
+
+kubectl apply -f deployment-back-end-pi-array.yaml
+kubectl apply -f service-back-end-pi-array.yaml 
+
+kubectl get svc,deploy,pods
+
+
+//Get the Stack Name
+STACK_NAME=$(eksctl get nodegroup --cluster nodejs-istio-cluster -o json | jq -r '.[].StackName')
+INSTANCE_PROFILE_ARN=$(aws cloudformation describe-stacks --stack-name $STACK_NAME | jq -r '.Stacks[].Outputs[] | select(.OutputKey=="InstanceProfileARN") | .OutputValue')
+ROLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME | jq -r '.Stacks[].Outputs[] | select(.OutputKey=="InstanceRoleARN") | .OutputValue' | cut -f2 -d/)
+echo $STACK_NAME
+echo $INSTANCE_PROFILE_ARN
+echo $ROLE_NAME
+
+
+
+
+// Get the secret token/Keys from the websites and store in parameter store..
+
+///aws ssm put-parameter --name "/Params/keys/DarkSkyAPISecret" --value "112233" --type String                      
+///aws ssm put-parameter --name "/Params/keys/MapBoxAccessToken" --value "112233" --type String
+
+aws ssm get-parameters --names "/Params/keys/DarkSkyAPISecret"
+aws ssm get-parameters --names "/Params/keys/MapBoxAccessToken"
+DarkSkyAPISecret=$(aws ssm get-parameter --name "/Params/keys/DarkSkyAPISecret" | jq -r '.Parameter | select(.Name=="/Params/keys/DarkSkyAPISecret") | .Value')
+MapBoxAccessToken=$(aws ssm get-parameter --name "/Params/keys/MapBoxAccessToken" | jq -r '.Parameter | select(.Name=="/Params/keys/MapBoxAccessToken") | .Value')
+
+
+
+
+
+////Git
+git init
+git status
+create a .gitignore file to include node_modules/ and other folders accordingly
+git add .
+git config --global user.name "Vijay Khanna"
+git config --global user.email vijay@email.com
+git commit -m "Initial Commit - Vijay Khanna"
+ssh-keygen
+
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+make a new repo on git : container-tracing-app
+
+git remote add origin https://github.com/vijay-khanna/container-tracing-app.git
+
+in git-hub add ssh keys. Copy paste the .pub keygen
+Test github connection, accept authenticity. : yes
+
+ssh -T git@github.com
+git push -u origin master
+enter :username/password for github
+
+//…or create a new repository on the command line
+echo "# container-tracing-app" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/vijay-khanna/container-tracing-app.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/vijay-khanna/container-tracing-app.git
+git push -u origin master
+//
+
+
+// Testing Get and POST
+//for backend Pi-array service
+curl -X POST localhost:3000/pi
+
+curl -X POST -H "Content-Type: application/json" --data '{"username":"xyz","password":"xyz"}' http://localhost:8083/pi
+curl -X POST -H "Content-Type: application/json" --data '{"piDigits":500}' http://localhost:8083/pi
+

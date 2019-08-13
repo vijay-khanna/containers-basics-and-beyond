@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-end-motm-service
+spec:
+  selector:
+    app: back-end-motm
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 91
+      targetPort: 91
+      

@@ -1,0 +1,27 @@
+# Deploy this deployment Yaml using command as 
+# kubectl create -f file.yaml --IMAGE_URL=<Full path to Repo , Image and Version>>
+# e.g. kubectl create -f file.yaml --IMAGE_URL=11223344.dkr.ecr.us-east-1.amazonaws.com/front-end:latest
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+  labels:
+    app: front-end
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: front-end
+  template:
+    metadata:
+      labels:
+        app: front-end
+    spec:
+      containers:
+      - name: front-end
+        image: {{IMAGE_URL}}
+        ports:
+        - containerPort: 80
+        
+        
