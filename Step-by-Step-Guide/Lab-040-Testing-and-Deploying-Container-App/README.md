@@ -4,8 +4,8 @@ In this Lab, we will deploy and test the application manually step by step. This
 * **Clone Repo**
 ```
 cd ~/environment
-git clone https://github.com/vijay-khanna/container-tracing-app
-cd ~/environment/container-tracing-app/
+git clone https://github.com/vijay-khanna/containers-basics-and-beyond
+cd ~/environment/containers-basics-and-beyond/
 ```
 
 
@@ -46,9 +46,9 @@ Optionally Test the above commands from the Worker Nodes. Use SSH Key created ea
 
 * **Deploy the Service, so it is ready by the time Deployment finishes**
 ```
-kubectl apply -f ~/environment/container-tracing-app/front-end/service-front-end.yaml 
-kubectl apply -f ~/environment/container-tracing-app/backend-pi-array/service-back-end-pi-array.yaml 
-kubectl apply -f ~/environment/container-tracing-app/backend-motm/service-back-end-motm.yaml 
+kubectl apply -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
+kubectl apply -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
+kubectl apply -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
 ```
 </br>
 
@@ -57,16 +57,16 @@ kubectl apply -f ~/environment/container-tracing-app/backend-motm/service-back-e
 //update the value of field : frontEndDNSURLandPort with the LB-URL or DNS A-Record. If it is a Route53 Entry, then create 'A' record and point to LB.
 
 front_end_lb=$(kubectl get svc front-end-service | grep front-end-service | awk '{print $4}') ; echo $front_end_lb 
-sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/container-tracing-app/front-end/public/js/app-client-script.js
+sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js
 //To Check frontEndDNSURLandPort value
-head -n3 ~/environment/container-tracing-app/front-end/public/js/app-client-script.js 
+head -n3 ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js 
 
 
 //backend-service-edit 
 backend_end_motd__lb=$(kubectl get svc back-end-motm-service | grep back-end-motm-service | awk '{print $4}') ; echo $backend_end_motd__lb 
-sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/container-tracing-app/front-end/src/utils/forecast.js 
+sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js 
 //To Check frontEndDNSURLandPort value
-head -n3 ~/environment/container-tracing-app/front-end/src/utils/forecast.js
+head -n3 ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js
 
 
 ```
@@ -75,7 +75,7 @@ head -n3 ~/environment/container-tracing-app/front-end/src/utils/forecast.js
 
 >#**FrontEnd Service**</br>
 ```
-cd ~/environment/container-tracing-app/front-end/       
+cd ~/environment/containers-basics-and-beyond/front-end/       
 aws ecr get-login --region us-east-1 --no-include-email  
 //Copy-Paste the Console output of above command output into the console to login. Starting with "docker login.... Ending with amazonaws.com". You must get "Login Succeeded" message to proceed.
 
@@ -101,7 +101,7 @@ docker push $frontEndRepoECRURI
 
 >#**Backend Pi-Array Service**</br>
 ```
-cd ~/environment/container-tracing-app/backend-pi-array/       
+cd ~/environment/containers-basics-and-beyond/backend-pi-array/       
  
  
 // This will delete existing ECR REPO
@@ -129,7 +129,7 @@ docker push $backEndPiArrayRepoECRURI
 
 >#**Backend Message of the Moment Service**</br>
 ```
-cd ~/environment/container-tracing-app/backend-motm/   
+cd ~/environment/containers-basics-and-beyond/backend-motm/   
  
  // This will delete existing ECR REPO
 backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
@@ -147,7 +147,7 @@ echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
 
 
 // version-1 motm
-cd ~/environment/container-tracing-app/backend-motm/v1/
+cd ~/environment/containers-basics-and-beyond/backend-motm/v1/
 docker build -t back-end-motm:v1 .
 docker images  | grep back-end-motm | grep v1
 backEndmotmImageId=$(docker images back-end-motm:v1 | grep back-end-motm | awk '{print $3}') ; echo $backEndmotmImageId   
@@ -157,7 +157,7 @@ docker push $backEndmotmRepoECRURI:v1
 
 
 // version-2 motm
-cd ~/environment/container-tracing-app/backend-motm/v2/
+cd ~/environment/containers-basics-and-beyond/backend-motm/v2/
 docker build -t back-end-motm:v2 .
 docker images  | grep back-end-motm | grep v2   
 backEndmotmImageId=$(docker images back-end-motm:v2 | grep back-end-motm | grep v2  | awk '{print $3}') ; echo $backEndmotmImageId   
@@ -166,7 +166,7 @@ docker push $backEndmotmRepoECRURI:v2
 
 
 // version-3 motm
-cd ~/environment/container-tracing-app/backend-motm/v3/
+cd ~/environment/containers-basics-and-beyond/backend-motm/v3/
 docker build -t back-end-motm:v3 .
 docker images  | grep back-end-motm | grep v3   
 backEndmotmImageId=$(docker images back-end-motm:v3 | grep back-end-motm | grep v3  | awk '{print $3}') ; echo $backEndmotmImageId   
@@ -182,25 +182,25 @@ docker push $backEndmotmRepoECRURI:v3
 * **Updating deployment files with ECR Link to Container Images**
 ```
 //replacing the IMAGE_URL with appropriate ECR Repo Locations for Deployment.Yaml Files
-cp ~/environment/container-tracing-app/front-end/deployment-front-end.yaml /tmp/deployment-front-end.yaml
+cp ~/environment/containers-basics-and-beyond/front-end/deployment-front-end.yaml /tmp/deployment-front-end.yaml
 sed -i "s|IMAGE_URL|$frontEndRepoECRURI|g" /tmp/deployment-front-end.yaml
 cat /tmp/deployment-front-end.yaml
 
 
-cp ~/environment/container-tracing-app/backend-pi-array/deployment-back-end-pi-array.yaml  /tmp/deployment-back-end-pi-array.yaml
+cp ~/environment/containers-basics-and-beyond/backend-pi-array/deployment-back-end-pi-array.yaml  /tmp/deployment-back-end-pi-array.yaml
 sed -i "s|IMAGE_URL|$backEndPiArrayRepoECRURI|g" /tmp/deployment-back-end-pi-array.yaml
 cat /tmp/deployment-back-end-pi-array.yaml
 
-cp ~/environment/container-tracing-app/backend-motm/v1/deployment-back-end-motm-v1.yaml /tmp/deployment-back-end-motm-v1.yaml 
+cp ~/environment/containers-basics-and-beyond/backend-motm/v1/deployment-back-end-motm-v1.yaml /tmp/deployment-back-end-motm-v1.yaml 
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v1.yaml 
 cat /tmp/deployment-back-end-motm-v1.yaml 
 
 
-cp ~/environment/container-tracing-app/backend-motm/v2/deployment-back-end-motm-v2.yaml /tmp/deployment-back-end-motm-v2.yaml 
+cp ~/environment/containers-basics-and-beyond/backend-motm/v2/deployment-back-end-motm-v2.yaml /tmp/deployment-back-end-motm-v2.yaml 
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v2.yaml 
 cat /tmp/deployment-back-end-motm-v2.yaml 
 
-cp ~/environment/container-tracing-app/backend-motm/v3/deployment-back-end-motm-v3.yaml /tmp/deployment-back-end-motm-v3.yaml 
+cp ~/environment/containers-basics-and-beyond/backend-motm/v3/deployment-back-end-motm-v3.yaml /tmp/deployment-back-end-motm-v3.yaml 
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v3.yaml 
 cat /tmp/deployment-back-end-motm-v3.yaml 
 
@@ -238,9 +238,9 @@ kubectl get svc,deploy,pods
 //kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
 //kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
 
-//kubectl delete -f ~/environment/container-tracing-app/front-end/service-front-end.yaml 
-//kubectl delete -f ~/environment/container-tracing-app/backend-motm/service-back-end-motm.yaml 
-//kubectl delete -f ~/environment/container-tracing-app/backend-pi-array/service-back-end-pi-array.yaml 
+//kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
+//kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
+//kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
 
 kubectl get svc,deploy,pods
 

@@ -52,9 +52,9 @@ kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
 rm -rf /tmp/*
 
 
-kubectl delete -f ~/environment/container-tracing-app/front-end/service-front-end.yaml 
-kubectl delete -f ~/environment/container-tracing-app/backend-motm/service-back-end-motm.yaml 
-kubectl delete -f ~/environment/container-tracing-app/backend-pi-array/service-back-end-pi-array.yaml 
+kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
+kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
+kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
 
 
 //Below ones in case the additional demo apps have been deployed.
