@@ -55,7 +55,7 @@ EoF
 kubectl apply -f ~/environment/rbac.yaml
 
 
-//install tiller using the helm
+#//install tiller using the helm
 
 helm init --service-account tiller
 
@@ -71,7 +71,7 @@ cd ~/environment
 
 curl -L https://git.io/getLatestIstio | sh -
 
-// version can be different as istio gets upgraded
+#// version can be different as istio gets upgraded
 cd istio-*
 
 sudo mv -v bin/istioctl /usr/local/bin/
@@ -80,7 +80,7 @@ kubectl create namespace istio-system
 
 helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
 
-//Verify that all 23 Istio CRDs were committed to the Kubernetes api-server
+#//Verify that all 23 Istio CRDs were committed to the Kubernetes api-server
 kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
 
 
