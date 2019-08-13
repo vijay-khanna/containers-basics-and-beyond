@@ -9,20 +9,14 @@
 
 ```
 cd ~/environment/istio*
- 
 helm delete --purge mywebserver
-
 kubectl delete -f istio-telemetry.yaml
-
 kubectl delete -f samples/bookinfo/networking/virtual-service-all-v1.yaml
-
 kubectl delete -f samples/bookinfo/networking/destination-rule-all.yaml
-
 kubectl delete -f samples/bookinfo/networking/bookinfo-gateway.yaml
-
 kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
-
 kubectl delete -f install/kubernetes/istio-demo.yaml
+
 for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl delete -f $i; done
 
 helm template install/kubernetes/helm/istio --name istio --namespace istio-system \
@@ -40,7 +34,7 @@ helm delete --purge istio-init
 
 * **Removing all Deployments and Services**
 ```
-//Deleting the key front-end and back-end services and deployments.
+#//Deleting the key front-end and back-end services and deployments.
 kubectl delete -f /tmp/deployment-front-end.yaml             
 kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
 kubectl delete -f /tmp/deployment-back-end-motm.yaml
@@ -57,7 +51,7 @@ kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/servic
 kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
 
 
-//Below ones in case the additional demo apps have been deployed.
+#//Below ones in case the additional demo apps have been deployed.
 kubectl delete -f ~/environment/pod-with-node-affinity.yaml
 kubectl delete -f ~/environment/redis-with-node-affinity.yaml
 kubectl delete -f ~/environment/web-with-node-affinity.yaml
@@ -78,7 +72,7 @@ kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1
 
 
 
-//check services and deployments
+#//check services and deployments
 kubectl get svc,deploy
 
 kubectl get ns
@@ -91,20 +85,20 @@ kubectl get ns
 
 * **Removing ad-hoc components on AWS**
 ```
-// ssh Keys
+#// ssh Keys
 aws ec2 delete-key-pair --key-name $EKS_WORKER_NODE_KEY
 
-// ***** Load Balancers. Check in EC2 Console. If any LB with tags of kubernetes exist, and delete accorgingly
+#// ***** Load Balancers. Check in EC2 Console. If any LB with tags of kubernetes exist, and delete accorgingly
 
-//*****  Route53 Entries. Check in Route53, and delete any Zones which are not required.
+#// * * * * *  Route53 Entries. Check in Route53, and delete any Zones which are not required.
 
 
 
-//SSM Paramter Store entries
+#//SSM Paramter Store entries
 aws ssm delete-parameter --name "/Params/keys/DarkSkyAPISecret"
 aws ssm delete-parameter --name "/Params/keys/MapBoxAccessToken"
 
-//To check deletion of parameters
+#//To check deletion of parameters
 aws ssm get-parameters --names "/Params/keys/DarkSkyAPISecret"
 aws ssm get-parameters --names "/Params/keys/MapBoxAccessToken"
 ```

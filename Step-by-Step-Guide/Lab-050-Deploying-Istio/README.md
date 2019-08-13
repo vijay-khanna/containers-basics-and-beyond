@@ -88,18 +88,18 @@ helm template install/kubernetes/helm/istio --name istio --namespace istio-syste
     --values install/kubernetes/helm/istio/values-istio-demo.yaml | kubectl apply -f -
 
 
-//Verifying the installation
+#//Verifying the installation
 
 kubectl get pods -n istio-system
 kubectl get svc -n istio-system
 
-//Injecting Pods inside containers
+#//Injecting Pods inside containers
 
 kubectl get pods
 istioctl kube-inject -f /tmp/deployment-back-end-pi-array.yaml | kubectl apply -f -
 kubectl get pods
 
-//wait till the backend pods initialize, then inject the front-end deployment
+#//wait till the backend pods initialize, then inject the front-end deployment
 istioctl kube-inject -f /tmp/deployment-front-end.yaml | kubectl apply -f -
 kubectl get pods
 ```
@@ -109,7 +109,7 @@ kubectl get pods
 ```
 
 
-// kiali. with default demo, username, password = admin. check in Preview of Cloud9
+#// kiali. with default demo, username, password = admin. check in Preview of Cloud9
 
 kubectl -n istio-system get svc kiali
 
@@ -117,14 +117,14 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=ki
 
 
 
-//Jaeger UI
+#//Jaeger UI
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 8080:16686
 
-//Zipkin
+#//Zipkin
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=zipkin -o jsonpath='{.items[0].metadata.name}') 8080:9411
 
 
-//Grafana and Prometheus
+#//Grafana and Prometheus
 kubectl -n istio-system get svc prometheus
 kubectl -n istio-system get svc grafana
 

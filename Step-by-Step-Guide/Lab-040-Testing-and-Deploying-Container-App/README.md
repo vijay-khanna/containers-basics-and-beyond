@@ -35,7 +35,7 @@ read -p "Enter the MapBoxAccessToken : " MapBoxAccessToken ; echo "MapBoxAccessT
 
 aws ssm put-parameter --name "/Params/keys/MapBoxAccessToken" --value $MapBoxAccessToken --type String --overwrite
 
-//To Verify the Successfull entry to SSM Store
+#//To Verify the Successfull entry to SSM Store
 aws ssm get-parameters --names "/Params/keys/DarkSkyAPISecret"
 aws ssm get-parameters --names "/Params/keys/MapBoxAccessToken"
 ```
@@ -54,18 +54,19 @@ kubectl apply -f ~/environment/containers-basics-and-beyond/backend-motm/service
 
 * **Update the Load Balancer for front end Service in client js file, and Optionally a Route53 Entry**
 ```
-//update the value of field : frontEndDNSURLandPort with the LB-URL or DNS A-Record. If it is a Route53 Entry, then create 'A' record and point to LB.
+#//update the value of field : frontEndDNSURLandPort with the LB-URL or DNS A-Record. If it is a Route53 Entry, then create 'A' record and point to LB.
 
 front_end_lb=$(kubectl get svc front-end-service | grep front-end-service | awk '{print $4}') ; echo $front_end_lb 
 sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js
-//To Check frontEndDNSURLandPort value
+#//To Check frontEndDNSURLandPort value
 head -n3 ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js 
 
 
-//backend-service-edit 
+#//backend-service-edit 
 backend_end_motd__lb=$(kubectl get svc back-end-motm-service | grep back-end-motm-service | awk '{print $4}') ; echo $backend_end_motd__lb 
 sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js 
-//To Check frontEndDNSURLandPort value
+
+#//To Check frontEndDNSURLandPort value
 head -n3 ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js
 
 
@@ -80,15 +81,15 @@ aws ecr get-login --region us-east-1 --no-include-email
 //Copy-Paste the Console output of above command output into the console to login. Starting with "docker login.... Ending with amazonaws.com". You must get "Login Succeeded" message to proceed.
 
 
- // This will delete existing ECR REPO
+ #// This will delete existing ECR REPO
 frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}'); echo $frontEndRepoECR
 aws ecr delete-repository --repository-name $frontEndRepoECR --force
  
-//Below command will create ECR Repository
+#//Below command will create ECR Repository
 frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri') 
 echo $frontEndRepoECRURI  
 
-//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
+#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
 
 docker build -t front-end:v1 .      
 docker images  | grep front-end    
@@ -104,17 +105,17 @@ docker push $frontEndRepoECRURI
 cd ~/environment/containers-basics-and-beyond/backend-pi-array/       
  
  
-// This will delete existing ECR REPO
+#// This will delete existing ECR REPO
 backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
 aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
 
-//Below command will create ECR Repository
+#//Below command will create ECR Repository
 backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri') 
 echo $backEndPiArrayRepoECRURI  
 
 echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
 
-//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
+#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
 
 docker build -t back-end-pi-array:v1 .
 docker images  | grep back-end-pi-array   
@@ -131,22 +132,22 @@ docker push $backEndPiArrayRepoECRURI
 ```
 cd ~/environment/containers-basics-and-beyond/backend-motm/   
  
- // This will delete existing ECR REPO
+# // This will delete existing ECR REPO
 backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
 aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
 
  
-//Below command will create ECR Repository
+#//Below command will create ECR Repository
 backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri') 
 echo $backEndmotmRepoECRURI  
 
 echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
 
-//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
+#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors. 
 
 
 
-// version-1 motm
+#// version-1 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v1/
 docker build -t back-end-motm:v1 .
 docker images  | grep back-end-motm | grep v1
@@ -156,7 +157,7 @@ docker push $backEndmotmRepoECRURI:v1
 
 
 
-// version-2 motm
+#// version-2 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v2/
 docker build -t back-end-motm:v2 .
 docker images  | grep back-end-motm | grep v2   
@@ -165,7 +166,7 @@ docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v2
 docker push $backEndmotmRepoECRURI:v2
 
 
-// version-3 motm
+#// version-3 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v3/
 docker build -t back-end-motm:v3 .
 docker images  | grep back-end-motm | grep v3   
@@ -181,7 +182,7 @@ docker push $backEndmotmRepoECRURI:v3
 
 * **Updating deployment files with ECR Link to Container Images**
 ```
-//replacing the IMAGE_URL with appropriate ECR Repo Locations for Deployment.Yaml Files
+#//replacing the IMAGE_URL with appropriate ECR Repo Locations for Deployment.Yaml Files
 cp ~/environment/containers-basics-and-beyond/front-end/deployment-front-end.yaml /tmp/deployment-front-end.yaml
 sed -i "s|IMAGE_URL|$frontEndRepoECRURI|g" /tmp/deployment-front-end.yaml
 cat /tmp/deployment-front-end.yaml
@@ -212,52 +213,52 @@ cat /tmp/deployment-back-end-motm-v3.yaml
 
 ```
 kubectl apply -f /tmp/deployment-back-end-pi-array.yaml
-//wait few seconds, after deploying backend. and then deploy front end..else there might be errors to fetch from backend.
-//
+#//wait few seconds, after deploying backend. and then deploy front end..else there might be errors to fetch from backend.
+
+#//
 
 kubectl apply -f /tmp/deployment-back-end-motm-v1.yaml
 kubectl apply -f /tmp/deployment-back-end-motm-v2.yaml
 kubectl apply -f /tmp/deployment-back-end-motm-v3.yaml
 
 kubectl get svc,deploy,pods
-//
+
+#//
 
 kubectl apply -f /tmp/deployment-front-end.yaml
 
 
+kubectl get svc,deploy,pods
+
+
+#// * * * * * Not to be used in normal flow, only for some changes/Testing purpose Only ***
+# kubectl delete -f /tmp/deployment-front-end.yaml              in case we need to delete the deployments
+# kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
+# kubectl delete -f /tmp/deployment-back-end-motm.yaml
+# kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
+# kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
+# kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
+
+# kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
+# kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
+# kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
 
 kubectl get svc,deploy,pods
 
 
 
-// * * * * * Not to be used in normal flow, only for some changes/Testing purpose Only ***
-//kubectl delete -f /tmp/deployment-front-end.yaml              in case we need to delete the deployments
-//kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
-//kubectl delete -f /tmp/deployment-back-end-motm.yaml
-//kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
-//kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
-//kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
 
-//kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
-//kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
-//kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
-
-kubectl get svc,deploy,pods
+# frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}'); echo $frontEndRepoECR
+# aws ecr delete-repository --repository-name $frontEndRepoECR --force
 
 
 
-
-//frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}'); echo $frontEndRepoECR
-//aws ecr delete-repository --repository-name $frontEndRepoECR --force
-
+# backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
+# aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
 
 
-//backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
-//aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
-
-
-//backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
-//aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
+# backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
+# aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
 
 ```
 
