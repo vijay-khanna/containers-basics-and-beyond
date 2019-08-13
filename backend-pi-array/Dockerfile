@@ -69,8 +69,9 @@ RUN npm install && npm cache clean --force
 RUN yum install which -y
 RUN PATH=$PATH:/usr/local/bindocker  
 COPY . .      
+COPY app-backend.js ./
 # copy other files later on, so as not to re-build npm with each change of .js file change on source.
 #ENTRYPOINT ["app.js"]
 
-CMD [ "node" , "app.js"]
+CMD [ "node" , "app-backend.js"]
 EXPOSE 8083

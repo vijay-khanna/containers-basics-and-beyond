@@ -67,10 +67,11 @@ COPY package*.json ./
 #USER node                //good practice to run the container with non toot user.
 RUN npm install && npm cache clean --force
 RUN yum install which -y
+COPY . .  
 RUN PATH=$PATH:/usr/local/bindocker  
-COPY . .      
+COPY app-front-end.js ./   
 # copy other files later on, so as not to re-build npm with each change of .js file change on source.
 #ENTRYPOINT ["app.js"]
 
-CMD [ "node" , "app.js"]
+CMD [ "node" , "app-front-end.js"]
 EXPOSE 80

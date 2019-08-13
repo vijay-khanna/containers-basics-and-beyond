@@ -143,6 +143,11 @@ eksctl delete cluster --name=$EKS_CLUSTER_NAME
 </br>
 
 
+* **Delete all local Docker images**
+```
+docker rmi -f $(docker images -a -q)
+```
+
 * **Removing cloud-9 Environment**
 ```
     Go to your Cloud9 Environment
@@ -152,4 +157,6 @@ eksctl delete cluster --name=$EKS_CLUSTER_NAME
 
 * **Verify CloudFormation Stacks are deleted**
 > check the CloudFormation Stack deletion for the EKS-Cluster and Cloud9 Stacks.
+
+
 
