@@ -38,6 +38,7 @@ aws ssm put-parameter --name "/Params/keys/MapBoxAccessToken" --value $MapBoxAcc
 #//To Verify the Successfull entry to SSM Store
 aws ssm get-parameters --names "/Params/keys/DarkSkyAPISecret"
 aws ssm get-parameters --names "/Params/keys/MapBoxAccessToken"
+
 ```
 </br>
 Optionally Test the above commands from the Worker Nodes. Use SSH Key created earlier.
