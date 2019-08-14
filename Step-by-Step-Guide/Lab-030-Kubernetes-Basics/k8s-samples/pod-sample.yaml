@@ -56,6 +56,8 @@ spec:
     # In reality, this sidecar would be a custom image
     # that uploads logs to a third-party or storage service.
     image: nginx
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do date; sleep 5;done"]
     ports:
       - containerPort: 80
 
