@@ -5,84 +5,75 @@ In this Lab, we will cover basic docker commands. We will make use of the Cloud9
 
 * **Getting Started**
 ```
+#//Validatr docker is running
+docker --version
+
+docker info
+
+
+#// List local docker images
+docker images
+
+#//Download and run container image from docker hub repo. This will run in detached mode
+docker run --name test-ubuntu-container -itd ubuntu
+
+#// List local docker images
+docker images
+
 #// To list current running containers
 docker ps
 
 #// To list all containers that ran on this Machine
 docker ps -a 
 
-#// List local docker images
-docker images
+#//To login inside the running container, and execute shell commands on bash prompt. <type exit to come out>
+docker exec -it test-ubuntu-container /bin/bash
 
+#//To execute a remote command on container, and get its output. Below will display the container hostname
+docker exec -it test-ubuntu-container hostname
 
-docker run --name test -it debian
+#//To remove the container
+docker rm test-ubuntu-container
 
-docker run -it --storage-opt size=120G fedora /bin/bash
+#//To run container (nginx-server) on non-default port
+docker run -t -d -p 8080:80 --name nginx-test-server nginx
 
+curl localhost:8080         #//Additionally Check Cloud9 Preview option to access web server via internet.
 
+#//Restarting a Container
+docker restart nginx-test-server
+docker ps               #//to verify the status : Up since xyz seconds
 
-..
-export VAR1=value1
-export VAR2=value2
+#//Check essential stats of a container
+docker top nginx-test-server
 
-$ docker run --env VAR1 --env VAR2 ubuntu env | grep VAR
-VAR1=value1
-VAR2=value2
-..
-
-
-
-docker run -t -d -p 8080:80 --name front-end front-end:v1
-
-docker exec -it ubuntu_bash bash
-
-docker exec -it -w /root ubuntu_bash pwd
-
-
-# Check via Cloud9 Preview in browser
-
-
-#// Deploying a sample web server
-
-
-
-docker restart my_container
-
-docker top CONTAINER
-
+docker stats nginx-test-server       #//Shows CPU%, MEM%, NET IO
 docker stats -all
 
-docker stats
+#//Viewing basic container logs (usually STDOUT / echo inside of containers)
+docker logs -f nginx-test-server   #//In another terminal run the curl command : $curl localhost:8080
+#// check the nginx logs in the original window.
 
-docker stats awesome_brattain
- 
-docker stats --format "{{.Container}}: {{.CPUPerc}}"
+#//One more Log example, to explain how the applications can emit simple logs using echo and those can be captured.
+docker run --name test-busybox-logs -d busybox sh -c "while true; do $(echo date); sleep 1; done"
+docker logs -f test-busybox-logs
+docker stop test-busybox-logs; docker rm test-busybox-logs
 
+```
+</br>
 
-docker rm <container>   //--force
-
-
-docker logs -f --until=2s
-docker logs  --tail
-docker logs <containerID>
-docker logs 
-
-#//
-
-
-#//
-
-#//
-
-#//
-
-
-
-
+* **Creating Docker Image. Simple Web Server**
+</br>
+```
 
 ```
 
-* **Creating Docker Image**
+
+* **Creating Docker Image. Test these commands after finishing Lab : Lab-040-Testing-and-Deploying-Container-App**
+</br>
+The below commands will help to run the local copies of the Nodejs application inside the Cloud9 instance, rather than EKS Cluster.
+Run these after you build the container images from Dockerfile
+</br>
 ```
 //To Kill and remove a container
 docker kill back-end-pi-array ; docker rm back-end-pi-array
@@ -101,8 +92,4 @@ docker run -t -d -p 8080:80 --name front-end front-end:v1
 //To run the backend-motm container locally   ... try with different containers, v1, v2, v3. all will give different responses
 docker run -t -d -p 91:91 --name back-end-motm back-end-motm:v1
 curl localhost:91/motm
-
-
-
-
 ```
