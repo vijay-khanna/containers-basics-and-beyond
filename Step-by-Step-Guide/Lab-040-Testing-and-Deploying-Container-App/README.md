@@ -102,8 +102,10 @@ aws ecr get-login --region us-east-1 --no-include-email
 #//Starting with "docker login.... Ending with amazonaws.com". 
 #//You must get "Login Succeeded" message to proceed.
 
+frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}')
+echo $frontEndRepoECR
 
-#---Copy-Paste the below Code Block, to create a new ECR Repo if required.
+#---Copy-Paste the below "IF - FI " Code Block, to create a new ECR Repo if required.
 
 if [ -z "$frontEndRepoECR" ] 
 then 
@@ -111,14 +113,18 @@ then
   echo "\$frontEndRepoECR is empty, will delete and re-create the ECR Repo" 
   aws ecr delete-repository --repository-name $frontEndRepoECR --force
   frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
+  echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
 else 
   clear
   echo "\$frontEndRepoECR is NOT empty, Will skip re-creating the ECR Repo" 
+  echo $frontEndRepoECRURI
 fi
 
 #---
 
-#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
+#//The below command will create Container image from DockerFile. 
+#//This takes 5-7 minutes. 
+#//Red text message for gpg key is normal, and are not errors.
 
 docker build -t front-end:v1 .      
 docker images  | grep front-end    
@@ -134,15 +140,28 @@ docker push $frontEndRepoECRURI
 cd ~/environment/containers-basics-and-beyond/backend-pi-array/       
 
 
-#// This will delete existing ECR REPO
-backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
-aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
-
-#//Below command will create ECR Repository
-backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri')
 echo $backEndPiArrayRepoECRURI  
 
-echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
+#---Copy-Paste the below "IF - FI " Code Block, to create a new Backend Pi array ECR Repo if required.
+
+if [ -z "$backEndPiArrayRepoECRURI" ] 
+then 
+  clear
+  echo "\$backEndPiArrayRepoECRURI is empty, will delete and re-create the ECR Repo" 
+  backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
+  aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
+
+  backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri')
+  echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
+else 
+  clear
+  echo "\$backEndPiArrayRepoECRURI is NOT empty, Will skip re-creating the ECR Repo, "
+  echo $backEndPiArrayRepoECRURI  
+fi
+
+#---
+
+
 
 #//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
 
@@ -161,16 +180,28 @@ docker push $backEndPiArrayRepoECRURI
 ```
 cd ~/environment/containers-basics-and-beyond/backend-motm/   
 
-# // This will delete existing ECR REPO
-backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
-aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
+echo $backEndmotmRepoECRURI
+
+#---Copy-Paste the below "IF - FI " Code Block, to create a new Backend motm - Message of Moment ECR Repo if required.
+
+if [ -z "$backEndmotmRepoECRURI" ] 
+then 
+  clear
+  echo "\$backEndmotmRepoECRURI is empty, will delete and re-create the ECR Repo" 
+  backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
+  aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
+  backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri')
+  echo $backEndmotmRepoECRURI  
+  echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
+else 
+  clear
+  echo "\$backEndmotmRepoECRURI is NOT empty, Will skip re-creating the ECR Repo, "
+  echo $backEndmotmRepoECRURI  
+fi
+
+#---
 
 
-#//Below command will create ECR Repository
-backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri')
-echo $backEndmotmRepoECRURI  
-
-echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
 
 #//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
 
