@@ -233,7 +233,12 @@ kubectl get svc,deploy,pods
 
 
 #// * * * * * To Delete all Deployments, Services Created in this Lab. This will retain all other elements ***
-:warning: :fire: :triangular_flag_on_post :hand:
+</br>
+:warning: 
+:fire: 
+:triangular_flag_on_post 
+:hand:
+
 kubectl delete -f /tmp/deployment-front-end.yaml              in case we need to delete the deployments
 kubectl delete -f /tmp/deployment-back-end-pi-array.yaml
 kubectl delete -f /tmp/deployment-back-end-motm.yaml
