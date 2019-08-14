@@ -234,7 +234,9 @@ kubectl get svc,deploy,pods
 
 ```
 </br>
-:warning: :fire:  :triangular_flag_on_post :hand: 
+
+:warning:  :fire:  :triangular_flag_on_post:  :hand: 
+</br>
 #// * * * * * To Delete all Deployments, Services Created in this Lab. This will retain all other elements ***
 ```
 
