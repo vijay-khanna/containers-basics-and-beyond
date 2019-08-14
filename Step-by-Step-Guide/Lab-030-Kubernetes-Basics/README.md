@@ -125,4 +125,6 @@ kubectl describe service front-end-service
 kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
 
 kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/service-sample-load-balancer.yaml
+
+
 ```
