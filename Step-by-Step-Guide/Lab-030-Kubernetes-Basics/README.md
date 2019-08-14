@@ -38,54 +38,67 @@ kubectl delete pod pod-with-sidecar
 
 * **Deployment**
 ```
-kubectl get deployments
-
 kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
 
 kubectl get deployments
-kubectl get pods
 
-kubectl edit deployment.v1.apps/nginx-deployment
-
-kubectl rollout status deployment.v1.apps/nginx-deployment
-
-kubectl get deployments
-
-kubectl get rs,pods
-
-kubectl describe deployments
+kubectl get pods                  #//check there will be 3 pods running as part of the nginx deployment
 
 
+#// To Edit a Deployment In-Line, without modifying the yaml file. 
+#// This is usually for temporary cases. Ideally all changes should be done via deployment.yaml file
+#// Edit the spec: => replicas: 3 to 2, save and exit editor
 
-kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.91 --record=true
+kubectl edit deployment.v1.apps/nginx-deployment      
 
-kubectl rollout history deployment.v1.apps/nginx-deployment
-
-kubectl annotate deployment.v1.apps/nginx-deployment kubernetes.io/change-cause="image updated to 1.9.1" --record
-
-kubectl rollout history deployment.v1.apps/nginx-deployment --revision=2
-
-kubectl rollout undo deployment.v1.apps/nginx-deployment
-
-kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=2
+#// below command will use Nano for editing.. 
+KUBE_EDITOR="nano"  kubectl edit deployment.v1.apps/nginx-deployment
 
 kubectl rollout status deployment.v1.apps/nginx-deployment
 
+kubectl get deploy,rs,pods
 
+#// Check the details of deployment, Note the Pod Template => Containers => nginx => Image value
 kubectl describe deployment nginx-deployment
 
-kubectl get deployment nginx-deployment -o wide
+#//Note the Tags of the running containers/Deployment. Note the Images used for each deployment
+kubectl get deploy -o wide
 
 
+#//Deploying a new container-version without editing the deployment.yaml. Some Sample revisions to observe the rollout history
+kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.91 --record=true
+kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.8 --record=true
+kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.92 --record=true
+
+
+#//Checking the rollout History of Deployments. Observe the Number of Revisions available.
+#//The revision numbers mentioned here can only be used to roll-back
+kubectl rollout history deployment.v1.apps/nginx-deployment         
+
+#//Describe a specific version : NOTE a valid Revision # must exist in previous history command
+kubectl rollout history deployment.v1.apps/nginx-deployment --revision=5
+
+
+#//Roll-Back one revision
+kubectl get deploy -o wide
+kubectl rollout undo deployment.v1.apps/nginx-deployment
+kubectl get deploy -o wide
+
+#//Rollback to specific revision. The revision# must exist in the history command output.
+kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=5
+
+kubectl rollout status deployment.v1.apps/nginx-deployment
+
+#//Scale out replicas using command line
 kubectl scale deployment.v1.apps/nginx-deployment --replicas=10
+kubectl get deploy -o wide
 
+#//To modify the CPU/Memory via command line. Ideally for persistence, the same should be done via deployent.yaml file
+kubectl describe deployment nginx-deployment | grep cpu
+kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=100m,memory=512Mi
+kubectl describe deployment nginx-deployment | grep cpu
 
-kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=200m,memory=512Mi
-
-
-
-
-
+#//Delete the Deployment
 kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
 
 
