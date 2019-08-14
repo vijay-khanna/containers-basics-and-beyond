@@ -241,7 +241,6 @@ kubectl get svc,deploy,pods
 ```
 kubectl delete -f /tmp/deployment-front-end.yaml              
 kubectl delete -f /tmp/deployment-back-end-pi-array.yaml
-kubectl delete -f /tmp/deployment-back-end-motm.yaml
 kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
 kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
 kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml

@@ -1,5 +1,5 @@
 /*
-Initialize first 
+Initialize first
 npm init -y
 npm i express
 npm i chalk
@@ -19,7 +19,7 @@ npm i node-fetch
 nodemon app.js -e js,hbs
 
 nodemon .\app.js
-try opening urls : 
+try opening urls :
 http://localhost:3000
 http://localhost:3000/help
 
@@ -32,7 +32,7 @@ const hbs = require('hbs')
 const webServerPort = process.argv[2] || 80
 //console.log(__dirname)          //prints directory name and file name below
 //console.log(__filename)
-//console.log(path.join(__dirname, 'public'))         //can append .. to go back.. 
+//console.log(path.join(__dirname, 'public'))         //can append .. to go back..
 const app = express()
 
 //Define Paths for Express Config
@@ -42,7 +42,7 @@ const partialsPath = path.join(__dirname,'templates/partials')
 const geocode = require('./src/utils/geocode')
 const forecast = require('./src/utils/forecast')
 const awsParamStore = require( 'aws-param-store' )
- 
+
 const fs = require('fs')
 const weatherUnits = 'si'
 const weatherLanguage='en'
@@ -55,13 +55,13 @@ hbs.registerPartials(partialsPath)
 
 
 //Setup Static Static Directory to serve
-app.use(express.static(publicDirectoryPath))         //needs path to server where index.html is stored.. 
+app.use(express.static(publicDirectoryPath))         //needs path to server where index.html is stored..
 //if app.use is provided, and has index.html, that file is used
 
 app.get('', (req,res) =>  {
     res.render('index',{
         title: 'Weather App',
-        name: 'Vijay'
+        name: 'Developer'
     })                 //uses Handlebar.. points to index.hbs
 })
 
@@ -70,15 +70,15 @@ app.get('/help', (req,res) =>  {
     res.render('help', {
         title: 'Help Page',
         helpText: 'This is some helpful Text',
-        name: 'Vijay'
-    })     
-})              
+        name: 'Developer'
+    })
+})
 
 
 app.get('/about', (req,res) =>  {
     res.render('about',{
         title: 'About Page',
-        name: 'Vijay'
+        name: 'Developer'
     })                 //uses Handlebar.. points to index.hbs
 })
 
@@ -94,19 +94,19 @@ app.get('/weather', (req,res) => {
         return res.send({
             error: 'You must provide an Address'
         })
-    }    
-   
-      
+    }
+
+
     //Pulling the Secret Key from AWS Parameter Store..
-        // Enter Data using command as 
+        // Enter Data using command as
           let DarkSkyAPISecret = awsParamStore.getParameterSync( '/Params/keys/DarkSkyAPISecret',{ region: 'us-east-1' } );
           //console.log(DarkSkyAPISecret.Value)
           let MapBoxAccessToken = awsParamStore.getParameterSync( '/Params/keys/MapBoxAccessToken',{ region: 'us-east-1' } );
           let FrontEndDNS = awsParamStore.getParameterSync( '/Params/keys/FrontEndDNS',{ region: 'us-east-1' } );
 
-        
-        geocode(req.query.address, MapBoxAccessToken.Value, (error, {latitude, longitude, location} = {} ) => {     
-            //{} gives default blank object in case no address is passed 
+
+        geocode(req.query.address, MapBoxAccessToken.Value, (error, {latitude, longitude, location} = {} ) => {
+            //{} gives default blank object in case no address is passed
             if (error){
                 //return console.log(error)
                 return res.send({error})
@@ -115,7 +115,7 @@ app.get('/weather', (req,res) => {
                 if (error){
                     //return console.log(error)
                     return res.send({error})
-                }       
+                }
                 res.send({
                     forecast: forecastData,
                     location,
@@ -123,8 +123,8 @@ app.get('/weather', (req,res) => {
                 })
             })
         })
-    
-        
+
+
 
 
 
@@ -141,11 +141,11 @@ app.get('/weather', (req,res) => {
 
 
 /*
-//Try Query String . 
+//Try Query String .
 http://localhost:3000/products?key=value
 http://localhost:3000/products?search=games
 http://localhost:3000/products?search=games&rating=5    //try this with console.log(req.query)
-Try 
+Try
 http://localhost:3000/products
 Above will give error : Search should be provided..
 */
@@ -174,9 +174,9 @@ app.get('/help/*', (req,res) => {     //* = match anything not matched so far
     res.render('404',{
         title: 'Error!!! Page Not Found',
         errorMessage: 'Help Article Not Found. ',
-        name: 'Vijay'
+        name: 'Developer'
 
-    })     
+    })
     //errorMessage: 'Generic Global Error'
 })
 
@@ -185,9 +185,9 @@ app.get('*', (req,res) => {     //* = match anything not matched so far
     res.render('404',{
         title: 'Error!!! Page Not Found',
         errorMessage: 'Generic Global Error',
-        name: 'Vijay'
+        name: 'Developer'
 
-    })     
+    })
 })
 
 
@@ -200,7 +200,7 @@ app.listen(webServerPort, () => {
 /*
 //app.get('') will not  return now, as we have the default file as static index.html
 //have put the static files for help, about hence removed the app.get for these
-app.get('', (req,res) => {  // req = request : object containing information about incoming request to server 
+app.get('', (req,res) => {  // req = request : object containing information about incoming request to server
                             // response = what goes back to requestor
     //res.send('Hello World')
     res.send('<h1> Hello World </h1>')  //Only one res.send is allowed at a time, if we put two there will be error
