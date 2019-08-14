@@ -113,7 +113,7 @@ Search for **"nodegroup"** AutoScaling Groups and delete these manually.
 
 >Security Groups
 -Might Need to **Delete / Clear Inbound-Rules** the Security Groups Manually, as some SG's are dependent on ELB SG's.
--Might need to **Detach** Network Interfaces attached to **ControlPlaneSecurityGroup**.
+-Might need to **Detach & Delete** Network Interfaces attached to **ControlPlaneSecurityGroup**.
 -Search for **"nodegroup"** Security Groups and empty them (**Clear Inbound-Rules**) and delete them manually. 
 
 </br>
