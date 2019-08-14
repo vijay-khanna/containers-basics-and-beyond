@@ -106,19 +106,18 @@ kubectl get pods
 </br>
 
 * **Checking Metrics and Tracing**
+Kiali, Grafana, Prometheus got deployed as part of the demo, run the below commands, and observe one by one.
 ```
 
-
 #// kiali. with default demo, username, password = admin. check in Preview of Cloud9
-
 kubectl -n istio-system get svc kiali
 
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 8080:20001
 
 
-
 #//Jaeger UI
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 8080:16686
+
 
 #//Zipkin
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=zipkin -o jsonpath='{.items[0].metadata.name}') 8080:9411
