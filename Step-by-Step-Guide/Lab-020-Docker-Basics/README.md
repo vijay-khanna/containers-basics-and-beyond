@@ -62,18 +62,20 @@ docker stop test-busybox-logs; docker rm test-busybox-logs
 ```
 </br>
 
-* **Creating Docker Image. Simple Web Server**
-</br>
+* **Creating Docker Image. Simple Web Server**</br>
+
+
+```
+ls
+
+
 ```
 
-```
 
-
-* **Creating Docker Image. Test these commands after finishing Lab : Lab-040-Testing-and-Deploying-Container-App**
-</br>
+* **Creating Docker Image. Test these commands after finishing Lab : Lab-040-Testing-and-Deploying-Container-App**</br>
 The below commands will help to run the local copies of the Nodejs application inside the Cloud9 instance, rather than EKS Cluster.
 Run these after you build the container images from Dockerfile
-</br>
+
 ```
 //To Kill and remove a container
 docker kill back-end-pi-array ; docker rm back-end-pi-array
