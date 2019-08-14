@@ -27,6 +27,11 @@ Create Application Token on the below websites, and store the Token in SSM Store
 Test the aws cli commands from Cloud9 Console
 
 ```
+#//Check if the Secrets Exist, as required, then this step can be skipped. 
+aws ssm get-parameters --names "/Params/keys/DarkSkyAPISecret"
+aws ssm get-parameters --names "/Params/keys/MapBoxAccessToken"
+
+#//Skip the below steps if Parameters in this Code-Block found if above step are fine
 read -p "Enter the DarkSkyAPISecret : " DarkSkyAPISecret ; echo "DarkSkyAPISecret :  "$DarkSkyAPISecret
 
 aws ssm put-parameter --name "/Params/keys/DarkSkyAPISecret" --value $DarkSkyAPISecret --type String --overwrite
@@ -59,17 +64,26 @@ kubectl apply -f ~/environment/containers-basics-and-beyond/backend-motm/service
 
 front_end_lb=$(kubectl get svc front-end-service | grep front-end-service | awk '{print $4}') ; echo $front_end_lb
 sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js
+
+
 #//To Check frontEndDNSURLandPort value
-head -n3 ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js
+#//Check if the Output of below two commands mentions the same LoadBalancer End Point
+
+echo $front_end_lb
+cat ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js | grep 'const frontEndDNSURLandPort' 
 
 
 #//backend-service-edit
-backend_end_motd__lb=$(kubectl get svc back-end-motm-service | grep back-end-motm-service | awk '{print $4}') ; echo $backend_end_motd__lb
+backend_end_motd__lb=$(kubectl get svc back-end-motm-service | grep back-end-motm-service | awk '{print $4}') 
+echo $backend_end_motd__lb
 sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js
 
-#//To Check frontEndDNSURLandPort value
-head -n3 ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js
 
+#//To Check frontEndDNSURLandPort value
+#//Check if the Output of below two commands mentions the same LoadBalancer End Point
+
+echo $backend_end_motd__lb
+cat ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js | grep 'var urlMotm'
 
 ```
 
@@ -77,18 +91,30 @@ head -n3 ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast
 
 >#**FrontEnd Service**</br>
 ```
-cd ~/environment/containers-basics-and-beyond/front-end/       
+cd ~/environment/containers-basics-and-beyond/front-end/      
+
+#//Below command will Login to ECR Repo
+
 aws ecr get-login --region us-east-1 --no-include-email  
-#//Copy-Paste the Console output of above command output into the console to login. Starting with "docker login.... Ending with amazonaws.com". You must get "Login Succeeded" message to proceed.
 
 
- #// This will delete existing ECR REPO
-frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}'); echo $frontEndRepoECR
+#//Copy-Paste the Console output of above command output into the console to login. 
+#//Starting with "docker login.... Ending with amazonaws.com". 
+#//You must get "Login Succeeded" message to proceed.
+
+
+---
+if [ -z "$frontEndRepoECR" ] 
+then 
+clear
+echo "\$frontEndRepoECR is empty, will delete and re-create the ECR Repo" 
 aws ecr delete-repository --repository-name $frontEndRepoECR --force
-
-#//Below command will create ECR Repository
 frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
-echo $frontEndRepoECRURI  
+else 
+clear
+echo "\$frontEndRepoECR is NOT empty, Will skip re-creating the ECR Repo" 
+fi
+---
 
 #//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
 
