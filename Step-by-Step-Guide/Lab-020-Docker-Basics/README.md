@@ -85,15 +85,13 @@ EXPOSE 80
 docker build -t test-web-server-image .   #// Will tag the new container image as : test-web-server-image
 docker images                             #// Verify the newly created Docker Image
 
-docker stop web-server-container ; docker rm web-server-container
+docker stop web-server-container ; docker rm web-server-container   #// To Stop and remove any existing running containers with same name
 
 docker run -itd --name web-server-container -p 80:80 test-web-server-image
 
 curl localhost:80                       #//should display the "Hello World" Message
 
-
-
-
+docker stop web-server-container ; docker rm web-server-container       #//Stop the container and free up the port 
 ```
 
 
