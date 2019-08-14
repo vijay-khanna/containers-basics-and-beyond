@@ -103,18 +103,20 @@ aws ecr get-login --region us-east-1 --no-include-email
 #//You must get "Login Succeeded" message to proceed.
 
 
----
+#---Copy-Paste the below Code Block, to create a new ECR Repo if required.
+
 if [ -z "$frontEndRepoECR" ] 
 then 
-clear
-echo "\$frontEndRepoECR is empty, will delete and re-create the ECR Repo" 
-aws ecr delete-repository --repository-name $frontEndRepoECR --force
-frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
+  clear
+  echo "\$frontEndRepoECR is empty, will delete and re-create the ECR Repo" 
+  aws ecr delete-repository --repository-name $frontEndRepoECR --force
+  frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
 else 
-clear
-echo "\$frontEndRepoECR is NOT empty, Will skip re-creating the ECR Repo" 
+  clear
+  echo "\$frontEndRepoECR is NOT empty, Will skip re-creating the ECR Repo" 
 fi
----
+
+#---
 
 #//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
 
