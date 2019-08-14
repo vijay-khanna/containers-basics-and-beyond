@@ -37,7 +37,7 @@ spec:
   containers:
 
   # Main application container
-  - name: app-container
+  - name: main-app-alpine-container
     # Simple application: write the current date
     # to the log file every five seconds
     image: alpine  # Smalle Linux Distro 
@@ -51,13 +51,13 @@ spec:
       mountPath: /var/log
 
   # Sidecar container
-  - name: sidecar-container
+  - name: sidecar-nginx-container
     # Simple sidecar: display log files using nginx.
     # In reality, this sidecar would be a custom image
     # that uploads logs to a third-party or storage service.
     image: nginx
     command: ["/bin/sh"]
-    args: ["-c", "while true; do date; sleep 5;done"]
+    args: ["-c", "while true; do date; sleep 10;done"]
     ports:
       - containerPort: 80
 
