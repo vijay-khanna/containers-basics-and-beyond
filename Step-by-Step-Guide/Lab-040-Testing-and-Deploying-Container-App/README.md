@@ -110,8 +110,8 @@ echo $frontEndRepoECR
 if [ -z "$frontEndRepoECR" ] 
 then 
   clear
-  echo "\$frontEndRepoECR is empty, will delete and re-create the ECR Repo" 
-  aws ecr delete-repository --repository-name $frontEndRepoECR --force
+  echo "\$frontEndRepoECR is empty, create the ECR Repo" 
+  # aws ecr delete-repository --repository-name $frontEndRepoECR --force
   frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
   echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
 else 
@@ -148,8 +148,8 @@ if [ -z "$backEndPiArrayRepoECRURI" ]
 then 
   clear
   echo "\$backEndPiArrayRepoECRURI is empty, will delete and re-create the ECR Repo" 
-  backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
-  aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
+  # backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
+  # aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
 
   backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri')
   echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
@@ -188,8 +188,8 @@ if [ -z "$backEndmotmRepoECRURI" ]
 then 
   clear
   echo "\$backEndmotmRepoECRURI is empty, will delete and re-create the ECR Repo" 
-  backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
-  aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
+  # backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
+  # aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
   backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri')
   echo $backEndmotmRepoECRURI  
   echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
