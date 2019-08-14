@@ -127,7 +127,10 @@ fi
 #//This takes 5-7 minutes. 
 #//Red text message for gpg key is normal, and are not errors.
 
-docker build -t front-end:v1 .      
+
+docker build -t front-end:v1 .   
+
+
 docker images  | grep front-end    
 frontEndImageId=$(docker images front-end:v1 | grep front-end | awk '{print $3}') ; echo $frontEndImageId   
 echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
@@ -168,8 +171,9 @@ fi
 #//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
 
 docker build -t back-end-pi-array:v1 .
-docker images  | grep back-end-pi-array   
 
+
+docker images  | grep back-end-pi-array   
 backEndPiArrayImageId=$(docker images back-end-pi-array:v1 | grep back-end-pi-array    | awk '{print $3}') ; echo $backEndPiArrayImageId   
 docker tag $backEndPiArrayImageId $backEndPiArrayRepoECRURI
 docker push $backEndPiArrayRepoECRURI
@@ -213,6 +217,8 @@ fi
 #// version-1 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v1/
 docker build -t back-end-motm:v1 .
+
+
 docker images  | grep back-end-motm | grep v1
 backEndmotmImageId=$(docker images back-end-motm:v1 | grep back-end-motm | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v1
@@ -223,6 +229,8 @@ docker push $backEndmotmRepoECRURI:v1
 #// version-2 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v2/
 docker build -t back-end-motm:v2 .
+
+
 docker images  | grep back-end-motm | grep v2   
 backEndmotmImageId=$(docker images back-end-motm:v2 | grep back-end-motm | grep v2  | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v2
@@ -232,6 +240,8 @@ docker push $backEndmotmRepoECRURI:v2
 #// version-3 motm
 cd ~/environment/containers-basics-and-beyond/backend-motm/v3/
 docker build -t back-end-motm:v3 .
+
+
 docker images  | grep back-end-motm | grep v3   
 backEndmotmImageId=$(docker images back-end-motm:v3 | grep back-end-motm | grep v3  | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v3
