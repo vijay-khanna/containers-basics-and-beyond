@@ -5,6 +5,22 @@
 
 </br>
 
+* **Removing Deployments and Services for Weather-App **
+```
+kubectl delete -f /tmp/deployment-front-end.yaml             
+kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
+
+kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
+kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
+kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
+
+kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
+kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
+kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
+
+rm -rf /tmp/*
+```
+
 * **Deleting Istio Components**
 
 ```
@@ -32,25 +48,8 @@ helm delete --purge istio-init
 ```
 </br>
 
-* **Removing all Deployments and Services**
+* **Removing Other Deployments and Services - Sample App**
 ```
-#//Deleting the key front-end and back-end services and deployments.
-kubectl delete -f /tmp/deployment-front-end.yaml             
-kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
-kubectl delete -f /tmp/deployment-back-end-motm.yaml
-kubectl delete -f /tmp/deployment-back-end-motm.yaml
-kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
-kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
-kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
-
-rm -rf /tmp/*
-
-
-kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml 
-kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
-kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
-
-
 #//Below ones in case the additional demo apps have been deployed.
 kubectl delete -f ~/environment/pod-with-node-affinity.yaml
 kubectl delete -f ~/environment/redis-with-node-affinity.yaml
@@ -80,7 +79,6 @@ kubectl get ns
 ```
 
 </br>
-
 
 
 * **Removing ad-hoc components on AWS**
