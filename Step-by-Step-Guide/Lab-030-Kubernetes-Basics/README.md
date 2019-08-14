@@ -100,8 +100,26 @@ kubectl describe deployment nginx-deployment | grep cpu
 
 #//Delete the Deployment
 kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
-
+```
 
 
 
 * **Service**
+```
+#//To Deploy a Simple LoadBalancer based Service.
+#//open the EC2 Console, check the creation of LoadBalancer
+#//Observe the Tags, which mention the kubernetes service name.
+
+kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/service-sample-load-balancer.yaml
+
+#//Need to have underlying pods to handle the traffic. 
+kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+
+#//Wait till you see the Instances 'InService' in the Loadbalancer tab. open the Loadbalancer URL in a Web browser 
+
+
+#//Deleting Resources
+kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+
+kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/service-sample-load-balancer.yaml
+```
