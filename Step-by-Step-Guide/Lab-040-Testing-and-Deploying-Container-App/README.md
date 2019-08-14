@@ -110,10 +110,11 @@ echo $frontEndRepoECR
 if [ -z "$frontEndRepoECR" ] 
 then 
   clear
-  echo "\$frontEndRepoECR is empty, create the ECR Repo" 
+  echo "\$frontEndRepoECR is empty, creating the ECR Repo" 
   # aws ecr delete-repository --repository-name $frontEndRepoECR --force
   frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
   echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
+  echo $frontEndRepoECRURI
 else 
   clear
   echo "\$frontEndRepoECR is NOT empty, Will skip re-creating the ECR Repo" 
@@ -147,12 +148,13 @@ echo $backEndPiArrayRepoECRURI
 if [ -z "$backEndPiArrayRepoECRURI" ] 
 then 
   clear
-  echo "\$backEndPiArrayRepoECRURI is empty, will delete and re-create the ECR Repo" 
+  echo "\$backEndPiArrayRepoECRURI is empty, will create the ECR Repo" 
   # backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
   # aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
 
   backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri')
   echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
+  echo $backEndPiArrayRepoECRURI 
 else 
   clear
   echo "\$backEndPiArrayRepoECRURI is NOT empty, Will skip re-creating the ECR Repo, "
@@ -187,12 +189,13 @@ echo $backEndmotmRepoECRURI
 if [ -z "$backEndmotmRepoECRURI" ] 
 then 
   clear
-  echo "\$backEndmotmRepoECRURI is empty, will delete and re-create the ECR Repo" 
+  echo "\$backEndmotmRepoECRURI is empty, create the ECR Repo" 
   # backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
   # aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
   backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri')
   echo $backEndmotmRepoECRURI  
   echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
+  echo $backEndmotmRepoECRURI  
 else 
   clear
   echo "\$backEndmotmRepoECRURI is NOT empty, Will skip re-creating the ECR Repo, "
