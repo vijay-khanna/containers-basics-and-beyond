@@ -118,6 +118,9 @@ kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basic
 #// Observe the Service details, Note the LoadBalancer ingress, EndPoints.
 kubectl describe service front-end-service
 
+#// Observe the service,deployment,pods
+kubectl get service,deployment,pods
+
 #//Wait till you see the Instances 'InService' in the Loadbalancer tab. open the Loadbalancer URL in a Web browser 
 
 
