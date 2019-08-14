@@ -247,8 +247,6 @@ kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/se
 
 kubectl get svc,deploy,pods
 
-
-
 ```
 
 </br>
