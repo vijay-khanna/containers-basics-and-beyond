@@ -17,6 +17,7 @@
     "events": "^3.0.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
+    "generate-pi": "^1.5.13",
     "handlebars": "^4.1.2",
     "hbs": "^4.0.4",
     "node-fetch": "^2.6.0",
@@ -24,6 +25,7 @@
     "path": "^0.12.7",
     "request": "^2.88.0",
     "sleep": "^6.1.0",
+    "thread-sleep": "^2.2.0",
     "yargs": "^13.3.0"
   },
   "description": "-----------",
