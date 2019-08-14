@@ -66,7 +66,32 @@ docker stop test-busybox-logs; docker rm test-busybox-logs
 
 
 ```
-ls
+#//Create the below Dockerfile in an empty folder.
+
+---
+FROM centos:latest
+MAINTAINER : Vijay Khanna
+
+RUN mkdir /node
+WORKDIR /node
+
+RUN yum -y install httpd
+RUN echo "Hello World" > /var/www/html/index.html
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+---
+
+#// To Build and test the custom Dockerfile
+docker build -t test-web-server-image .   #// Will tag the new container image as : test-web-server-image
+docker images                             #// Verify the newly created Docker Image
+
+docker stop web-server-container ; docker rm web-server-container
+
+docker run -itd --name web-server-container -p 80:80 test-web-server-image
+
+curl localhost:80                       #//should display the "Hello World" Message
+
+
 
 
 ```
