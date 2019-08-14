@@ -168,7 +168,9 @@ fi
 
 
 
-#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
+#//The below command will create Container image from DockerFile. 
+#//This takes 5-7 minutes. 
+#//Red text message for gpg key is normal, and not errors.
 
 docker build -t back-end-pi-array:v1 .
 
@@ -210,7 +212,9 @@ fi
 
 
 
-#//The below command will create Container image from DockerFile. This takes 5-7 minutes. Red text message for gpg key is normal, and not errors.
+#//The below command will create Container image from DockerFile. 
+#//This takes 5-7 minutes. 
+#//Red text message for gpg key is normal, and not errors.
 
 
 
