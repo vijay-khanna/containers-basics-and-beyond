@@ -160,9 +160,13 @@ docker rmi -f $(docker images -a -q)
     Select the environment created and pick delete
 ```
 
+* **Verify VPC for EKS Cluster is deleted**
+> Check in VPC Console, and check that the VPC is deleted. there might be a need to delete some components in case some custom resources were created using kubectl commands. 
 
 * **Verify CloudFormation Stacks are deleted**
 > check the CloudFormation Stack deletion for the EKS-Cluster and Cloud9 Stacks.
+
+
 
 
 
