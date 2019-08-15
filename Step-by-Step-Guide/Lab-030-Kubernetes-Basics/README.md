@@ -7,7 +7,9 @@ In this sample file, we go through the basic elements of Pod Definition, and als
 
 ```
 #//To Create the pod
-kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/pod-sample.yaml
+cd ~/environment/containers-basics-and-beyond/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/
+
+kubectl apply -f pod-sample.yaml
 
 kubectl get pods          #// Observe the 2/2 in Ready, which means that both the containers in pod are ready
 
@@ -20,6 +22,8 @@ apt-get update -y && apt-get install curl -y
 #// Access the log file via the sidecar (After this command, type 'exit' to return to the Cloud9 Instance OS prompt)
 curl 'http://localhost:80/app.txt'
 
+exit          #//to return to the Cloud9 Instance OS prompt
+
 # // Inspect the pod . Check the Mounts: , Containers: showing two containers:(app-alpine-container: & sidecar-nginx--container:)
 kubectl describe pod pod-with-sidecar
 
@@ -28,7 +32,7 @@ kubectl logs pod-with-sidecar -c sidecar-nginx-container
 
 
 #//To Remove the pod
-kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/pod-sample.yaml
+kubectl delete -f pod-sample.yaml
 
 #//Optionally this command can also delete the pod
 kubectl delete pod pod-with-sidecar
@@ -38,7 +42,7 @@ kubectl delete pod pod-with-sidecar
 
 * **Deployment**
 ```
-kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+kubectl apply -f deployment-nginx.yaml
 
 kubectl get deployments
 
@@ -49,7 +53,7 @@ kubectl get pods                  #//check there will be 3 pods running as part 
 #// This is usually for temporary cases. Ideally all changes should be done via deployment.yaml file
 #// Edit the spec: => replicas: 3 to 2, save and exit editor
 
-kubectl edit deployment.v1.apps/nginx-deployment      
+kubectl edit deployment.v1.apps/nginx-deployment        #use  vi commands, and <esc>wq! to save and exit
 
 #// below command will use Nano for editing.. 
 KUBE_EDITOR="nano"  kubectl edit deployment.v1.apps/nginx-deployment
@@ -76,7 +80,7 @@ kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.92 --record=
 kubectl rollout history deployment.v1.apps/nginx-deployment         
 
 #//Describe a specific version : NOTE a valid Revision # must exist in previous history command
-kubectl rollout history deployment.v1.apps/nginx-deployment --revision=5
+kubectl rollout history deployment.v1.apps/nginx-deployment --revision=2
 
 
 #//Roll-Back one revision
@@ -85,7 +89,7 @@ kubectl rollout undo deployment.v1.apps/nginx-deployment
 kubectl get deploy -o wide
 
 #//Rollback to specific revision. The revision# must exist in the history command output.
-kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=5
+kubectl rollout undo deployment.v1.apps/nginx-deployment --to-revision=1
 
 kubectl rollout status deployment.v1.apps/nginx-deployment
 
@@ -99,7 +103,7 @@ kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=
 kubectl describe deployment nginx-deployment | grep cpu
 
 #//Delete the Deployment
-kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+kubectl delete -f deployment-nginx.yaml
 ```
 
 
@@ -110,10 +114,10 @@ kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basi
 #//open the EC2 Console, check the creation of LoadBalancer
 #//Observe the Tags, which mention the kubernetes service name.
 
-kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/service-sample-load-balancer.yaml
+kubectl apply -f service-sample-load-balancer.yaml
 
 #//Need to have underlying pods to handle the traffic. 
-kubectl apply -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+kubectl apply -f deployment-nginx.yaml
 
 #// Observe the Service details, Note the LoadBalancer ingress, EndPoints.
 kubectl describe service front-end-service
@@ -125,9 +129,9 @@ kubectl get service,deployment,pods
 
 
 #//Deleting Resources
-kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/deployment-nginx.yaml
+kubectl delete -f deployment-nginx.yaml
 
-kubectl delete -f https://raw.githubusercontent.com/vijay-khanna/containers-basics-and-beyond/master/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/service-sample-load-balancer.yaml
+kubectl delete -f service-sample-load-balancer.yaml
 
 
 ```
