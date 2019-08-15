@@ -5,7 +5,7 @@
 
 </br>
 
-* **Removing Deployments and Services for Weather-App **
+* **Removing Deployments and Services for Weather-App**
 ```
 kubectl delete -f /tmp/deployment-front-end.yaml             
 kubectl delete -f /tmp/deployment-back-end-pi-array.yaml 
