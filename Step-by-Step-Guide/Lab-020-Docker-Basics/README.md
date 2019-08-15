@@ -24,7 +24,7 @@ docker images
 docker ps
 
 #// To list all containers that ran on this Machine
-docker ps -a 
+docker ps -a
 
 #//To login inside the running container, and execute shell commands on bash prompt. <type exit to come out>
 docker exec -it test-ubuntu-container /bin/bash
@@ -84,7 +84,7 @@ docker run -itd --name web-server-container -p 80:80 test-web-server-image
 
 curl localhost:80                       #//should display the "Hello World" Message
 
-docker stop web-server-container ; docker rm web-server-container       #//Stop the container and free up the port 
+docker stop web-server-container ; docker rm web-server-container       #//Stop the container and free up the port
 ```
 
 * **Creating Docker Image. Test these commands after finishing Lab : Lab-040-Testing-and-Deploying-Container-App**</br>
@@ -93,20 +93,20 @@ Run these after you build the container images from Dockerfile
 
 ```
 //To Kill and remove a container
-docker kill back-end-pi-array ; docker rm back-end-pi-array
-docker kill front-end ; docker rm front-end
+docker kill app-one-ver1-back-end-pi-array ; docker rm app-one-ver1-back-end-pi-array
+docker kill app-one-ver1-front-end ; docker rm app-one-ver1-front-end
 
 //To run the backend-pi-array container locally and fire a POST request via command line
-docker run -t -d -p 90:90 --name back-end-pi-array back-end-pi-array:v1
+docker run -t -d -p 90:90 --name app-one-ver1-back-end-pi-array app-one-ver1-back-end-pi-array:v1
 curl -X POST -H "Content-Type: application/json" --data '{"piDigits":500}' http://localhost:90/pi
 
 //To run the front-end container locally
-docker run -t -d -p 80:80 --name front-end front-end:v1
+docker run -t -d -p 80:80 --name app-one-ver1-front-end app-one-ver1-front-end:v1
 curl localhost
-docker run -t -d -p 8080:80 --name front-end front-end:v1
+docker run -t -d -p 8080:80 --name app-one-ver1-front-end app-one-ver1-front-end:v1
 
 
 //To run the backend-motm container locally   ... try with different containers, v1, v2, v3. all will give different responses
-docker run -t -d -p 91:91 --name back-end-motm back-end-motm:v1
+docker run -t -d -p 91:91 --name app-one-ver1-back-end-motm app-one-ver1-back-end-motm:v1
 curl localhost:91/motm
 ```
