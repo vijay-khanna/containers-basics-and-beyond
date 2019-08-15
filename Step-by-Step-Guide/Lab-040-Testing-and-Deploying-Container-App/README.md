@@ -4,7 +4,11 @@ In this Lab, we will deploy and test the application manually step by step. This
 * **Clone Repo**
 ```
 cd ~/environment
-git clone https://github.com/vijay-khanna/containers-basics-and-beyond
+
+if [ ! -d ~/environment/containers-basics-and-beyond ]; then
+  git clone https://github.com/vijay-khanna/containers-basics-and-beyond
+fi
+
 cd ~/environment/containers-basics-and-beyond/
 ```
 
@@ -52,9 +56,9 @@ Optionally Test the above commands from the Worker Nodes. Use SSH Key created ea
 
 * **Deploy the Service, so it is ready by the time Deployment finishes**
 ```
-kubectl apply -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml
-kubectl apply -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml
-kubectl apply -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml
+kubectl apply -f ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/service-front-end.yaml
+kubectl apply -f ~/environment/containers-basics-and-beyond/app-one/ver1/backend-pi-array/service-back-end-pi-array.yaml
+kubectl apply -f ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/service-back-end-motm.yaml
 ```
 </br>
 
@@ -63,27 +67,27 @@ kubectl apply -f ~/environment/containers-basics-and-beyond/backend-motm/service
 #//update the value of field : frontEndDNSURLandPort with the LB-URL or DNS A-Record. If it is a Route53 Entry, then create 'A' record and point to LB.
 
 front_end_lb=$(kubectl get svc front-end-service | grep front-end-service | awk '{print $4}') ; echo $front_end_lb
-sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js
+sed -i "s|LBorDNSURL|$front_end_lb|g"  ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/public/js/app-client-script.js
 
 
 #//To Check frontEndDNSURLandPort value
 #//Check if the Output of below two commands mentions the same LoadBalancer End Point
 
 echo $front_end_lb
-cat ~/environment/containers-basics-and-beyond/front-end/public/js/app-client-script.js | grep 'const frontEndDNSURLandPort' 
+cat ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/public/js/app-client-script.js | grep 'const frontEndDNSURLandPort' 
 
 
 #//backend-service-edit
 backend_end_motd__lb=$(kubectl get svc back-end-motm-service | grep back-end-motm-service | awk '{print $4}') 
 echo $backend_end_motd__lb
-sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js
+sed -i "s|MOTMLBURL|$backend_end_motd__lb|g"  ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/src/utils/forecast.js
 
 
 #//To Check frontEndDNSURLandPort value
 #//Check if the Output of below two commands mentions the same LoadBalancer End Point
 
 echo $backend_end_motd__lb
-cat ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js | grep 'var urlMotm'
+cat ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/src/utils/forecast.js | grep 'var urlMotm'
 
 ```
 
@@ -91,7 +95,7 @@ cat ~/environment/containers-basics-and-beyond/front-end/src/utils/forecast.js |
 
 >#**FrontEnd Service**</br>
 ```
-cd ~/environment/containers-basics-and-beyond/front-end/      
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/      
 
 #//Below command will Login to ECR Repo
 
@@ -112,7 +116,7 @@ then
   clear
   echo "\$frontEndRepoECR is empty, creating the ECR Repo" 
   # aws ecr delete-repository --repository-name $frontEndRepoECR --force
-  frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end | jq -r  '.repository.repositoryUri')
+  frontEndRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_front_end_app_one_ver1 | jq -r  '.repository.repositoryUri')
   echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
   echo $frontEndRepoECRURI
 else 
@@ -128,11 +132,11 @@ fi
 #//Red text message for gpg key is normal, and are not errors.
 
 
-docker build -t front-end:v1 .   
+docker build -t app-one-ver1-front-end:v1 .   
 
 
-docker images  | grep front-end    
-frontEndImageId=$(docker images front-end:v1 | grep front-end | awk '{print $3}') ; echo $frontEndImageId   
+docker images  | grep app-one-ver1-front-end    
+frontEndImageId=$(docker images app-one-ver1-front-end:v1 | grep app-one-ver1-front-end | awk '{print $3}') ; echo $frontEndImageId   
 echo "export frontEndRepoECRURI=${frontEndRepoECRURI}" >> ~/.bash_profile
 docker tag $frontEndImageId $frontEndRepoECRURI
 docker push $frontEndRepoECRURI  
@@ -141,7 +145,7 @@ docker push $frontEndRepoECRURI
 
 >#**Backend Pi-Array Service**</br>
 ```
-cd ~/environment/containers-basics-and-beyond/backend-pi-array/       
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/backend-pi-array/       
 
 
 echo $backEndPiArrayRepoECRURI  
@@ -155,7 +159,7 @@ then
   # backEndPiArrayRepoECR=$(echo $backEndPiArrayRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndPiArrayRepoECR
   # aws ecr delete-repository --repository-name $backEndPiArrayRepoECR --force
 
-  backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array | jq -r  '.repository.repositoryUri')
+  backEndPiArrayRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_pi_array_app_one_ver1 | jq -r  '.repository.repositoryUri')
   echo "export backEndPiArrayRepoECRURI=${backEndPiArrayRepoECRURI}" >> ~/.bash_profile
   echo $backEndPiArrayRepoECRURI 
 else 
@@ -172,11 +176,11 @@ fi
 #//This takes 5-7 minutes. 
 #//Red text message for gpg key is normal, and not errors.
 
-docker build -t back-end-pi-array:v1 .
+docker build -t app-one-ver1-back-end-pi-array:v1 .
 
 
-docker images  | grep back-end-pi-array   
-backEndPiArrayImageId=$(docker images back-end-pi-array:v1 | grep back-end-pi-array    | awk '{print $3}') ; echo $backEndPiArrayImageId   
+docker images  | grep docker build -t app-one-ver1-back-end-pi-array:v1 .back-end-pi-array   
+backEndPiArrayImageId=$(docker images app-one-ver1-back-end-pi-array:v1 | grep app-one-ver1-back-end-pi-array    | awk '{print $3}') ; echo $backEndPiArrayImageId   
 docker tag $backEndPiArrayImageId $backEndPiArrayRepoECRURI
 docker push $backEndPiArrayRepoECRURI
 ```
@@ -186,7 +190,7 @@ docker push $backEndPiArrayRepoECRURI
 
 >#**Backend Message of the Moment Service**</br>
 ```
-cd ~/environment/containers-basics-and-beyond/backend-motm/   
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/   
 
 echo $backEndmotmRepoECRURI
 
@@ -198,7 +202,7 @@ then
   echo "\$backEndmotmRepoECRURI is empty, create the ECR Repo" 
   # backEndmotmRepoECR=$(echo $backEndmotmRepoECRURI  | awk -F'/' '{print $2}') ; echo $backEndmotmRepoECR
   # aws ecr delete-repository --repository-name $backEndmotmRepoECR --force
-  backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm | jq -r  '.repository.repositoryUri')
+  backEndmotmRepoECRURI=$(aws ecr create-repository --repository-name ${EKS_CLUSTER_NAME,,}_back_end_motm_app_one_ver1 | jq -r  '.repository.repositoryUri')
   echo $backEndmotmRepoECRURI  
   echo "export backEndmotmRepoECRURI =${backEndmotmRepoECRURI}" >> ~/.bash_profile
   echo $backEndmotmRepoECRURI  
@@ -219,35 +223,35 @@ fi
 
 
 #// version-1 motm
-cd ~/environment/containers-basics-and-beyond/backend-motm/v1/
-docker build -t back-end-motm:v1 .
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v1/
+docker build -t app-one-ver1-back-end-motm:v1 .
 
 
-docker images  | grep back-end-motm | grep v1
-backEndmotmImageId=$(docker images back-end-motm:v1 | grep back-end-motm | awk '{print $3}') ; echo $backEndmotmImageId   
+docker images  | grep app-one-ver1-back-end-motm | grep v1
+backEndmotmImageId=$(docker images app-one-ver1-back-end-motm:v1 | grep app-one-ver1-back-end-motm | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v1
 docker push $backEndmotmRepoECRURI:v1
 
 
 
 #// version-2 motm
-cd ~/environment/containers-basics-and-beyond/backend-motm/v2/
-docker build -t back-end-motm:v2 .
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v2/
+docker build -t app-one-ver1-back-end-motm:v2 .
 
 
-docker images  | grep back-end-motm | grep v2   
-backEndmotmImageId=$(docker images back-end-motm:v2 | grep back-end-motm | grep v2  | awk '{print $3}') ; echo $backEndmotmImageId   
+docker images  | grep app-one-ver1-back-end-motm | grep v2   
+backEndmotmImageId=$(docker images app-one-ver1-back-end-motm:v2 | grep app-one-ver1-back-end-motm | grep v2  | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v2
 docker push $backEndmotmRepoECRURI:v2
 
 
 #// version-3 motm
-cd ~/environment/containers-basics-and-beyond/backend-motm/v3/
-docker build -t back-end-motm:v3 .
+cd ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v3/
+docker build -t app-one-ver1-back-end-motm:v3 .
 
 
-docker images  | grep back-end-motm | grep v3   
-backEndmotmImageId=$(docker images back-end-motm:v3 | grep back-end-motm | grep v3  | awk '{print $3}') ; echo $backEndmotmImageId   
+docker images  | grep app-one-ver1-back-end-motm | grep v3   
+backEndmotmImageId=$(docker images app-one-ver1-back-end-motm:v3 | grep app-one-ver1-back-end-motm | grep v3  | awk '{print $3}') ; echo $backEndmotmImageId   
 docker tag $backEndmotmImageId $backEndmotmRepoECRURI:v3
 docker push $backEndmotmRepoECRURI:v3
 
@@ -260,25 +264,25 @@ docker push $backEndmotmRepoECRURI:v3
 * **Updating deployment files with ECR Link to Container Images**
 ```
 #//replacing the IMAGE_URL with appropriate ECR Repo Locations for Deployment.Yaml Files
-cp ~/environment/containers-basics-and-beyond/front-end/deployment-front-end.yaml /tmp/deployment-front-end.yaml
+cp ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/deployment-front-end.yaml /tmp/deployment-front-end.yaml
 sed -i "s|IMAGE_URL|$frontEndRepoECRURI|g" /tmp/deployment-front-end.yaml
 cat /tmp/deployment-front-end.yaml
 
 
-cp ~/environment/containers-basics-and-beyond/backend-pi-array/deployment-back-end-pi-array.yaml  /tmp/deployment-back-end-pi-array.yaml
+cp ~/environment/containers-basics-and-beyond/app-one/ver1/backend-pi-array/deployment-back-end-pi-array.yaml  /tmp/deployment-back-end-pi-array.yaml
 sed -i "s|IMAGE_URL|$backEndPiArrayRepoECRURI|g" /tmp/deployment-back-end-pi-array.yaml
 cat /tmp/deployment-back-end-pi-array.yaml
 
-cp ~/environment/containers-basics-and-beyond/backend-motm/v1/deployment-back-end-motm-v1.yaml /tmp/deployment-back-end-motm-v1.yaml
+cp ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v1/deployment-back-end-motm-v1.yaml /tmp/deployment-back-end-motm-v1.yaml
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v1.yaml
 cat /tmp/deployment-back-end-motm-v1.yaml
 
 
-cp ~/environment/containers-basics-and-beyond/backend-motm/v2/deployment-back-end-motm-v2.yaml /tmp/deployment-back-end-motm-v2.yaml
+cp ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v2/deployment-back-end-motm-v2.yaml /tmp/deployment-back-end-motm-v2.yaml
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v2.yaml
 cat /tmp/deployment-back-end-motm-v2.yaml
 
-cp ~/environment/containers-basics-and-beyond/backend-motm/v3/deployment-back-end-motm-v3.yaml /tmp/deployment-back-end-motm-v3.yaml
+cp ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/v3/deployment-back-end-motm-v3.yaml /tmp/deployment-back-end-motm-v3.yaml
 sed -i "s|IMAGE_URL|$backEndmotmRepoECRURI|g" /tmp/deployment-back-end-motm-v3.yaml
 cat /tmp/deployment-back-end-motm-v3.yaml
 
@@ -292,15 +296,12 @@ cat /tmp/deployment-back-end-motm-v3.yaml
 kubectl apply -f /tmp/deployment-back-end-pi-array.yaml
 #//wait few seconds, after deploying backend. and then deploy front end..else there might be errors to fetch from backend.
 
-#//
 
 kubectl apply -f /tmp/deployment-back-end-motm-v1.yaml
 kubectl apply -f /tmp/deployment-back-end-motm-v2.yaml
 kubectl apply -f /tmp/deployment-back-end-motm-v3.yaml
 
 kubectl get svc,deploy,pods
-
-#//
 
 kubectl apply -f /tmp/deployment-front-end.yaml
 
@@ -321,9 +322,9 @@ kubectl delete -f /tmp/deployment-back-end-motm-v1.yaml
 kubectl delete -f /tmp/deployment-back-end-motm-v2.yaml
 kubectl delete -f /tmp/deployment-back-end-motm-v3.yaml
 
-kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-front-end.yaml
-kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml
-kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml
+kubectl delete -f ~/environment/containers-basics-and-beyond/app-one/ver1/front-end/service-front-end.yaml
+kubectl delete -f ~/environment/containers-basics-and-beyond/app-one/ver1/backend-motm/service-back-end-motm.yaml
+kubectl delete -f ~/environment/containers-basics-and-beyond/app-one/ver1/backend-pi-array/service-back-end-pi-array.yaml
 
 kubectl get svc,deploy,pods
 
