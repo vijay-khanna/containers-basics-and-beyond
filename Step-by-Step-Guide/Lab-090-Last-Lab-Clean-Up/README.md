@@ -18,6 +18,8 @@ kubectl delete -f ~/environment/containers-basics-and-beyond/front-end/service-f
 kubectl delete -f ~/environment/containers-basics-and-beyond/backend-motm/service-back-end-motm.yaml 
 kubectl delete -f ~/environment/containers-basics-and-beyond/backend-pi-array/service-back-end-pi-array.yaml 
 
+kubectl delete daemonsets,replicasets,services,deployments,pods,rc --all
+
 rm -rf /tmp/*
 ```
 
