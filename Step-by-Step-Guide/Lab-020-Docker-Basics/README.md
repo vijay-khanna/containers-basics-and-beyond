@@ -66,24 +66,17 @@ docker stop test-busybox-logs; docker rm test-busybox-logs
 
 
 ```
-#//Create the below Dockerfile in an empty folder.
+#//Clone the Repo
 
----
-FROM centos:latest
-MAINTAINER : Vijay Khanna
+cd ~/environment/
+git clone https://github.com/vijay-khanna/containers-basics-and-beyond
 
-RUN mkdir /node
-WORKDIR /node
+cd ~/environment/containers-basics-and-beyond/Step-by-Step-Guide/Lab-020-Docker-Basics/app1/
 
-RUN yum -y install httpd
-RUN echo "Hello World" > /var/www/html/index.html
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-EXPOSE 80
----
 
 #// To Build and test the custom Dockerfile
-docker build -t test-web-server-image .   #// Will tag the new container image as : test-web-server-image
-docker images                             #// Verify the newly created Docker Image
+docker build -t test-web-server-image .          #// Will tag the new container image as : test-web-server-image
+docker images | grep test-web-server-image       #// Verify the newly created Docker Image
 
 docker stop web-server-container ; docker rm web-server-container   #// To Stop and remove any existing running containers with same name
 
@@ -93,7 +86,6 @@ curl localhost:80                       #//should display the "Hello World" Mess
 
 docker stop web-server-container ; docker rm web-server-container       #//Stop the container and free up the port 
 ```
-
 
 * **Creating Docker Image. Test these commands after finishing Lab : Lab-040-Testing-and-Deploying-Container-App**</br>
 The below commands will help to run the local copies of the Nodejs application inside the Cloud9 instance, rather than EKS Cluster.
