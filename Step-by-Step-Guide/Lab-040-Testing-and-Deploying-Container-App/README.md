@@ -179,7 +179,8 @@ fi
 docker build -t app-one-ver1-back-end-pi-array:v1 .
 
 
-docker images  | grep docker build -t app-one-ver1-back-end-pi-array:v1 .back-end-pi-array   
+docker images  | grep app-one-ver1-back-end-pi-array
+
 backEndPiArrayImageId=$(docker images app-one-ver1-back-end-pi-array:v1 | grep app-one-ver1-back-end-pi-array    | awk '{print $3}') ; echo $backEndPiArrayImageId   
 docker tag $backEndPiArrayImageId $backEndPiArrayRepoECRURI
 docker push $backEndPiArrayRepoECRURI
