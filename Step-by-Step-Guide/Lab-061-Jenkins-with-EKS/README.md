@@ -24,12 +24,17 @@ printf $(kubectl get secret --namespace default cicd-jenkins -o jsonpath="{.data
 
 
 * **Creating a Sample Pipeline to test Jenkins**
+Click "New Item", Enter Item Name "Sample-hello-world", select "Freestyle project", click "OK"
+Enter Description "First Hello World project"
+In Build "Add build step" => "Execute shell". Command : echo "Hello World", Save
+
+To Test, Open the Project "Sample-hello-world", => Click "Build Now"
+
+In Cloud9, check status "kubectl get pods -w", Will launch a new pod to execute the Job.
+In Jenkins GUI, => On Left side, click Build History => #1 => "Console Output". It should Finish with Success, and echo statement.
 
 
-```
-#//
 
-```
 
 * **Create a Pipeline for Nodejs Containerised Application**
 
