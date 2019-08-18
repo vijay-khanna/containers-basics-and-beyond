@@ -1,4 +1,4 @@
-# Lab : Jenkins with EKS
+# Lab : Jenkins with EKS <<< WORK IN PROGRESS>>
 
 In this Lab, we will Install Jenkins on EKS, and deploy a pipeline to launch Containerised NodeJs Application
 
