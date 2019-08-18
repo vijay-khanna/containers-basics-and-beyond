@@ -5,7 +5,7 @@ In this Lab, we will Install Jenkins on EKS, and deploy a pipeline to launch Con
 * **Deploy Jenkins on EKS**
 Ensure Helm is installed, use the previous labs to have it configured. 
 
-
+```
 helm install stable/jenkins --set rbac.create=true --name cicd
 
 kubectl get pods -w
@@ -21,7 +21,7 @@ printf $(kubectl get secret --namespace default cicd-jenkins -o jsonpath="{.data
 
 
 
-```
+
 #//To Create the pod
 cd ~/environment/containers-basics-and-beyond/Step-by-Step-Guide/Lab-030-Kubernetes-Basics/k8s-samples/
 
