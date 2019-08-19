@@ -126,11 +126,17 @@ kubectl get nodes
 ```
 Export the Worker Role Name for use throughout
 ```
-STACK_NAME=$(eksctl get nodegroup --cluster $EKS_CLUSTER_NAME -o json | jq -r '.[].StackName'); echo$
+STACK_NAME=$(eksctl get nodegroup --cluster $EKS_CLUSTER_NAME -o json | jq -r '.[].StackName')
+echo -e " * * \e[101m	 ...STACK_NAME... : \e[0m"$STACK_NAME 
+
 INSTANCE_PROFILE_ARN=$(aws cloudformation describe-stacks --stack-name $STACK_NAME | jq -r '.Stacks[].Outputs[] | select(.OutputKey=="InstanceProfileARN") | .OutputValue')
-echo $INSTANCE_PROFILE_ARN
+echo -e " * * \e[101m	 ...INSTANCE_PROFILE_ARN... : \e[0m"$INSTANCE_PROFILE_ARN
+
 ROLE_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME | jq -r '.Stacks[].Outputs[] | select(.OutputKey=="InstanceRoleARN") | .OutputValue' | cut -f2 -d/)
-echo $ROLE_NAME
+echo -e " * * \e[101m	 ...ROLE_NAME... : \e[0m"$ROLE_NAME
+
+
+
 echo "export ROLE_NAME=${ROLE_NAME}" >> ~/.bash_profile
 echo "export INSTANCE_PROFILE_ARN=${INSTANCE_PROFILE_ARN}" >> ~/.bash_profile
 ```
