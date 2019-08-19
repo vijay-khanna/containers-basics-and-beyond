@@ -27,7 +27,9 @@ Create a **new environment** e.g. "Cloud9 Lab - Containerized Nodejs application
 
 * **Capture Cluster Unique Name. This Name will be used to create a ssh key pair as well:**
 ```
-read -p "Enter a unique EKS cluster Name : " EKS_CLUSTER_NAME ; echo "EKS Cluster Name to be used is "$EKS_CLUSTER_NAME
+read -p "Enter a unique EKS cluster Name : " EKS_CLUSTER_NAME ; 
+echo -e "\n * * \e[106m ...EKS Cluster Name to be used is... : "$EKS_CLUSTER_NAME"\e[0m \n"
+
 ```
 Saving the Cluster Name to bash-profile. In case the Cloud9 Instance Reboots, these variables will be saved and exported automatically
 ```
@@ -65,6 +67,10 @@ rm -vf ${HOME}/.aws/credentials
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
 
+echo -e " * * \e[106m ...AWS_REGION... : "$AWS_REGION"\e[0m \n"
+echo -e " * * \e[106m ...ACCOUNT_ID... : "$ACCOUNT_ID"\e[0m \n"
+
+
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" >> ~/.bash_profile
 echo "export AWS_REGION=${AWS_REGION}" >> ~/.bash_profile
 aws configure set default.region ${AWS_REGION}
@@ -72,6 +78,8 @@ aws configure get default.region
 
 EKS_WORKER_NODE_KEY=${EKS_CLUSTER_NAME}_WORKER_NODE_KEY
 echo $EKS_WORKER_NODE_KEY
+echo -e " * * \e[106m ...The Key Name to be created is... : "$EKS_WORKER_NODE_KEY"\e[0m"
+
 echo "export EKS_WORKER_NODE_KEY=${EKS_WORKER_NODE_KEY}" >> ~/.bash_profile
 cat ~/.bash_profile
 
@@ -93,7 +101,8 @@ ssh-keygen
 Delete old-key-pair in case if existing with same name. The Delete Command is optional. You can use your own keypair name. 
 This keypair can be used to ssh to the Worker Nodes.
 ```
-echo "The Key Name to be created is "$EKS_WORKER_NODE_KEY
+
+echo -e " * * \e[106m ...The Key Name to be created is... : "$EKS_WORKER_NODE_KEY"\e[0m"
 
 aws ec2 delete-key-pair --key-name $EKS_WORKER_NODE_KEY        // Take care while using this command, as it will delete the old keypair
 aws ec2 import-key-pair --key-name $EKS_WORKER_NODE_KEY --public-key-material file://~/.ssh/id_rsa.pub
