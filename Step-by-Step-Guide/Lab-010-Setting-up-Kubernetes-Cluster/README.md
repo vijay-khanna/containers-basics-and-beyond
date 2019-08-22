@@ -111,9 +111,9 @@ aws ec2 import-key-pair --key-name $EKS_WORKER_NODE_KEY --public-key-material fi
 
 * **Download eksctl and deploy EKS Cluster:**
 ```
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/0.3.1/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv -v /tmp/eksctl /usr/local/bin
+
 ```
 Confirm the eksctl command works:  You should get output similar to below </br>
 version.Info{BuiltAt:"", GitCommit:"", GitTag:"0.3.1"}</br>
