@@ -20,3 +20,21 @@ node app-sample-app.js 8081
 curl localhost:8081/stats
 ```
 
+Containerize and Push to Repo
+
+```
+$(aws ecr get-login --region us-east-1 --no-include-email)
+
+frontEndRepoECR=$(echo $frontEndRepoECRURI | awk -F'/' '{print $2}')
+echo $frontEndRepoECR
+
+#---Check if Repo Exists, else create. If Exist, then update variable 'sampleAppURI' with the REPO URI
+
+sampleAppURI=$(aws ecr create-repository --repository-name sample_app_stats_ver1 | jq -r  '.repository.repositoryUri')
+echo "export sampleAppURI=${frontEndRepoECRURI}" >> ~/.bash_profile
+echo $sampleAppURI
+
+
+
+```
+
