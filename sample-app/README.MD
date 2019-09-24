@@ -34,7 +34,15 @@ sampleAppURI=$(aws ecr create-repository --repository-name sample_app_stats_ver1
 echo "export sampleAppURI=${frontEndRepoECRURI}" >> ~/.bash_profile
 echo $sampleAppURI
 
+docker build -t $sampleAppURI:v1 . 
 
+docker kill sample-app-stats-container ; docker rm sample-app-stats-container
+docker run -t -d -p 8081:80 --name sample-app-stats-container $sampleAppURI:v1
+docker ps
+curl localhost:8081/stats
+
+
+docker push $sampleAppURI:v1
 
 ```
 
