@@ -82,12 +82,12 @@ hbs.registerPartials(partialsPath)
 app.use(express.static(publicDirectoryPath))         //needs path to server where index.html is stored..
 //if app.use is provided, and has index.html, that file is used
 
-app.get('', (req,res) =>  {
-    res.render('index',{
-        title: 'Weather App',
-        name: 'Developer'
+app.get('/', (req,res) =>  {
+  res.status(200)
+  var msg1 = 'All is Well'
+  res.send('All is Well')
     })                 //uses Handlebar.. points to index.hbs
-})
+
 
 app.get('/motm', (request, response) => {
   var motm_array =[]
