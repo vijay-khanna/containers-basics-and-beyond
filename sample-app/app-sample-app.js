@@ -120,7 +120,7 @@ function getRandomInt(min, max) {
 
 
 app.get('/stats', (request, response) => {
-  var randomNumber = getRandomInt(50, 2000)
+  var randomNumber = getRandomInt(1, 200)
   var remoteIP =  request.connection.remoteAddress
   
   var waitTill = new Date(new Date().getTime() + randomNumber );
