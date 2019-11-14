@@ -1,4 +1,4 @@
-FROM centos
+FROM centos:7
 # This Container will house the node-js weather application. 
 # This is the The Front End micro-service
 
