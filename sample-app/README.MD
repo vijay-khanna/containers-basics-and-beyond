@@ -44,5 +44,22 @@ curl localhost:8081/stats
 
 docker push $sampleAppURI:v1
 
+sed -i "s|IMAGE_URI|$sampleAppURI:v1|g"  ~/environment/containers-basics-and-beyond/sample-app/deployment-sample-app.yaml
+
+
+# Creating Service
+kubectl apply -f service-loadbalancer.yaml
+kubectl get svc
+
+# Creading Deployment with newly created Container Image
+kubectl apply -f deployment-sample-app.yaml
+
+
+## Deleting Service and Deployments
+kubectl delete -f service-loadbalancer.yaml
+
+
+
 ```
+
 
