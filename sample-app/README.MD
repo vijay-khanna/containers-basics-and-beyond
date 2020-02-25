@@ -2,12 +2,17 @@ Steps to Containerise a sample application
 
 
 ```
+## Create an Admin Role for EC2, assign the Role to the Cloud9 Instance. 
+## In the Cloud9 Instance, Preferences => AWS Settings => Disable the "AWS Managed Credentials" Slider. 
+## Run AWS Configure, set the region
 
 cd ~/environment
 
 git clone https://github.com/vijay-khanna/containers-basics-and-beyond.git
 
 cd ~/environment/containers-basics-and-beyond/sample-app/
+
+sudo yum install jq -y
 
 ```
 Basic Test locally
