@@ -132,7 +132,7 @@ app.get('/stats', (request, response) => {
   
 
   
-  var rspString = {"Message": msg, "Version":ver,"TimeStamp":tsStr,"hostname" :hostname, "remoteIP":remoteIP, "appLatencyms":randomNumber}
+  var rspString = {"Message": msg, "Version":ver,"TimeStamp":tsStr,"hostname" :hostname, "remoteIP":remoteIP, "appLatencyms":randomNumber,"webServerPort":webServerPort}
  
   console.log(rspString)
   response.status(200)
